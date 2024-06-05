@@ -1,15 +1,11 @@
 <template>
-  <v-container>
-    <MainView/>
-  </v-container>
+  <div id="app">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import MainView from './components/MainView.vue';
-
 export default {
-  components: {
-    MainView
-  }
+  name: 'App'
 };
 </script>

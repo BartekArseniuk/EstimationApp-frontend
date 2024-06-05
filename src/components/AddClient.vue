@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-container>
-            <v-card>
+            <v-card class="card">
                 <v-card-title>Dodaj Klienta</v-card-title>
                 <v-card-text>
                     <v-form @submit.prevent="saveClient">
@@ -48,7 +48,7 @@ export default {
             //todo
         },
         cancel() {
-            //todo
+            this.$router.push({ name: 'MainView' });
         },
         updateLogoPreview() {
             const file = this.client.logo;

@@ -1,7 +1,7 @@
 <template>
     <v-app>
         <v-container>
-            <v-card>
+            <v-card class="card">
                 <v-card-title>Dodaj Projekt</v-card-title>
                 <v-card-text>
                     <v-form @submit.prevent="saveProject">
@@ -43,10 +43,10 @@ export default {
             //todo
         },
         cancel() {
-            //todo
+            this.$router.push({ name: 'MainView' });
         },
         addNewClient() {
-            //todo
+            this.$router.push({ name: 'AddClient' });
         }
     }
 };

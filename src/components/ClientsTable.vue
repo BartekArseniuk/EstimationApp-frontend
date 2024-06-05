@@ -1,12 +1,12 @@
 <template>
     <v-app>
-        <v-card>
+        <v-card class="table-card">
             <v-card-title>
                 Lista klientów
-                <v-btn @click="goToAddClient" small color="blue darken-1" dark>Dodaj</v-btn>
+                <v-btn class="add-button" @click="goToAddClient" small color="blue darken-1" dark>Dodaj</v-btn>
                 <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="filteredClients" :search="search">
+            <v-data-table :headers="headers" :items="filteredClients" :search="search" class="table">
                 <template v-slot:body="{ items }">
                     <tbody>
                         <tr v-for="item in items" :key="item.id">
@@ -16,8 +16,8 @@
                             <td>{{ item.country }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>
-                                <v-icon @click="editClient(item)">mdi-pencil</v-icon>
-                                <v-icon @click="deleteClient(item.id)">mdi-delete</v-icon>
+                                <v-icon @click="editClient(item)" class="action-button">mdi-pencil</v-icon>
+                                <v-icon @click="deleteClient(item.id)" class="action-button">mdi-delete</v-icon>
                             </td>
                         </tr>
                     </tbody>
@@ -52,7 +52,7 @@ export default {
     },
     methods: {
         goToAddClient() {
-            //todo
+            this.$router.push({ name: 'AddClient' });
         },
         editClient() {
             //todo
