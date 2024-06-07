@@ -75,9 +75,16 @@ export default {
         editEstimation() {
             //todo
         },
-        deleteEstimation() {
-            //todo
-        },
+        deleteEstimation(estimationId) {
+            axios.delete(`http://localhost:8000/api/estimations/${estimationId}`)
+                .then(response => {
+                    this.estimations = this.estimations.filter(estimation => estimation.id !== estimationId);
+                    window.alert('Usunięto wycenę', response);
+                })
+                .catch(error => {
+                    console.error('Błąd usuwania wyceny:', error);
+                });
+        }
     },
 };
 </script>

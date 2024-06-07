@@ -16,8 +16,8 @@
                             <td>{{ item.estimate }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>
-                                <v-icon @click="editClient(item)" class="action-button">mdi-pencil</v-icon>
-                                <v-icon @click="deleteClient(item.id)" class="action-button">mdi-delete</v-icon>
+                                <v-icon @click="editProject(item)" class="action-button">mdi-pencil</v-icon>
+                                <v-icon @click="deleteProject(item.id)" class="action-button">mdi-delete</v-icon>
                             </td>
                         </tr>
                     </tbody>
@@ -72,8 +72,15 @@ export default {
         editProject() {
             //todo
         },
-        deleteProject() {
-            //todo
+        deleteProject(projectId) {
+            axios.delete(`http://localhost:8000/api/projects/${projectId}`)
+                .then(response => {
+                    this.projects = this.projects.filter(project => project.id !== projectId);
+                    window.alert('Usunięto projekt', response);
+                })
+                .catch(error => {
+                    console.error('Błąd usuwania projektu:', error);
+                });
         }
     }
 };
