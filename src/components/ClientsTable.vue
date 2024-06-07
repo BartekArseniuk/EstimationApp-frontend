@@ -12,7 +12,7 @@
                         <tr v-for="item in items" :key="item.id">
                             <td>{{ item.id }}</td>
                             <td>{{ item.name }}</td>
-                            <td><v-img :src="item.logo" height="50px"></v-img></td>
+                            <td><img v-if="item.logo" :src="getLogoUrl(item.logo)" height="50px" width="50px"></td>
                             <td>{{ item.country }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>
@@ -28,6 +28,9 @@
 </template>
 
 <script>
+
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -50,7 +53,17 @@ export default {
             });
         },
     },
+    created() {
+        this.fetchClients();
+    },
     methods: {
+        fetchClients() {
+            axios.get('http://localhost:8000/api/clients').then(response => {
+                this.clients = response.data;
+            }).catch(error => {
+                console.error('Błąd pobierania klientów:', error);
+            });
+        },
         goToAddClient() {
             this.$router.push({ name: 'AddClient' });
         },
@@ -60,6 +73,9 @@ export default {
         deleteClient() {
             //todo
         },
+        getLogoUrl(base64String) {
+            return 'data:image/png;base64,' + base64String;
+        }
     },
 };
 </script>

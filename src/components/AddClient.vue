@@ -9,7 +9,8 @@
                         <v-text-field v-model="client.description" label="Opis"></v-text-field>
                         <v-row>
                             <v-col cols="10">
-                                <v-file-input v-model="client.logo" label="Logo" @change="updateLogoPreview"></v-file-input>
+                                <v-file-input v-model="client.logo" label="Logo"
+                                    @change="updateLogoPreview"></v-file-input>
                             </v-col>
                             <v-col cols="2">
                                 <v-img v-if="client.logo" :src="client.logoPreview" height="50px" width="50px"></v-img>
@@ -29,6 +30,9 @@
 </template>
 
 <script>
+
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -45,7 +49,26 @@ export default {
     },
     methods: {
         saveClient() {
-            //todo
+            if (this.client.name && this.client.description && this.client.logoBase64 && this.client.country && this.client.email) {
+                const formData = {
+                    name: this.client.name,
+                    description: this.client.description,
+                    logo: this.client.logoBase64,
+                    country: this.client.country,
+                    email: this.client.email
+                };
+
+                axios.post('http://localhost:8000/api/clients', formData)
+                    .then(response => {
+                        window.alert('Klient został dodany pomyślnie', response);
+                        this.$router.push({ name: 'MainView' });
+                    })
+                    .catch(error => {
+                        window.alert('Błąd podczas dodawania klienta', error);
+                    });
+            } else {
+                window.alert('Wypełnij wszystkie pola');
+            }
         },
         cancel() {
             this.$router.push({ name: 'MainView' });
@@ -54,7 +77,7 @@ export default {
             const file = this.client.logo;
             const reader = new FileReader();
 
-            reader.onload = (e) => {
+            reader.onload = () => {
                 const img = new Image();
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
@@ -65,12 +88,14 @@ export default {
 
                     ctx.drawImage(img, 0, 0, 50, 50);
 
-                    this.client.logoPreview = canvas.toDataURL();
+                    this.client.logoBase64 = canvas.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '');
                 };
-                img.src = e.target.result;
+                img.src = reader.result;
             };
 
-            reader.readAsDataURL(file);
+            if (file) {
+                reader.readAsDataURL(file);
+            }
         }
     }
 };

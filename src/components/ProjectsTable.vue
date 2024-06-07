@@ -12,8 +12,8 @@
                         <tr v-for="item in items" :key="item.id">
                             <td>{{ item.id }}</td>
                             <td>{{ item.name }}</td>
-                            <td>{{ item.client }}</td>
-                            <td>{{ calculateTotalEstimate(item.estimates) }}</td>
+                            <td>{{ item.client.name }}</td>
+                            <td>{{ item.estimate }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>
                                 <v-icon @click="editClient(item)" class="action-button">mdi-pencil</v-icon>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
@@ -35,8 +37,8 @@ export default {
             headers: [
                 { text: 'L.p.', value: 'id' },
                 { text: 'Nazwa', value: 'name' },
-                { text: 'Klient', value: 'client' },
-                { text: 'Wycena', value: 'estimates' },
+                { text: 'Klient', value: 'client.name' },
+                { text: 'Wycena', value: 'estimate' },
                 { text: 'Data dodania', value: 'created_at' },
                 { text: 'Akcje', value: 'actions', sortable: false },
             ],
@@ -46,11 +48,24 @@ export default {
     computed: {
         filteredProjects() {
             return this.projects.filter(project => {
-                return project.client.toLowerCase().includes(this.search.toLowerCase()) || project.created_at.toLowerCase().includes(this.search.toLowerCase());
+                const clientName = project.client.name ? project.client.name.toLowerCase() : '';
+                const createdAt = project.created_at ? project.created_at.toLowerCase() : '';
+                return clientName.includes(this.search.toLowerCase()) ||
+                    createdAt.includes(this.search.toLowerCase());
             });
         },
     },
+    created() {
+        this.fetchProjects();
+    },
     methods: {
+        fetchProjects() {
+            axios.get('http://localhost:8000/api/projects').then(response => {
+                this.projects = response.data;
+            }).catch(error => {
+                console.error('Błąd pobierania projektów:', error);
+            });
+        },
         goToAddProject() {
             this.$router.push({ name: 'AddProject' });
         },
@@ -59,14 +74,8 @@ export default {
         },
         deleteProject() {
             //todo
-        },
-        calculateTotalEstimate(estimates) {
-            if (!estimates) {
-                return 'Brak';
-            }
-            return estimates.reduce((total, estimate) => total + estimate, 0);
         }
-    },
+    }
 };
 </script>
 
