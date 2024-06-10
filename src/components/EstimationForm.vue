@@ -2,7 +2,7 @@
     <v-app>
         <v-container>
             <v-card class="card">
-                <v-card-title>Dodaj Estymację</v-card-title>
+                <v-card-title>Wycena</v-card-title>
                 <v-card-text>
                     <v-form @submit.prevent="saveEstimation">
                         <v-text-field v-model="estimation.name" label="Nazwa" dense></v-text-field>
@@ -92,7 +92,7 @@ export default {
             this.$router.push({ name: 'MainView' });
         },
         addNewProject() {
-            this.$router.push({ name: 'AddProject' });
+            this.$router.push({ name: 'Project' });
         }
     }
 };

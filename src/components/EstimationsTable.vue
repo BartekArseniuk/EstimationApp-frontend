@@ -17,8 +17,8 @@
                             <td>{{ item.amount }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>
-                                <v-icon @click="editEstimation(item)" class="action-button">mdi-pencil</v-icon>
-                                <v-icon @click="deleteEstimation(item.id)" class="action-button">mdi-delete</v-icon>
+                                <v-icon @click="editClient(item)">mdi-pencil</v-icon>
+                                <v-icon @click="deleteClient(item.id)">mdi-delete</v-icon>
                             </td>
                         </tr>
                     </tbody>
@@ -70,7 +70,7 @@ export default {
             });
         },
         goToAddEstimation() {
-            this.$router.push({ name: 'AddEstimation' });
+            this.$router.push({ name: 'Estimation' });
         },
         editEstimation() {
             //todo

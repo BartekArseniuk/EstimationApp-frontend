@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import MainView from '../components/MainView.vue';
-import AddClient from '@/components/AddClient.vue';
-import AddProject from '../components/AddProject.vue';
-import AddEstimation from '../components/AddEstimation.vue';
+import MainView from '@/components/MainView.vue';
+import AddClient from '@/components/ClientForm.vue';
+import AddProject from '@/components/ProjectForm.vue';
+import AddEstimation from '@/components/EstimationForm.vue';
 
 Vue.use(Router);
 
@@ -16,18 +16,18 @@ export default new Router({
       component: MainView
     },
     {
-      path: '/add-client',
-      name: 'AddClient',
+      path: '/client',
+      name: 'Client',
       component: AddClient
     },
     {
-      path: '/add-project',
-      name: 'AddProject',
+      path: '/project',
+      name: 'Project',
       component: AddProject
     },
     {
-      path: '/add-estimation',
-      name: 'AddEstimation',
+      path: '/estimation',
+      name: 'Estimation',
       component: AddEstimation
     }
   ]

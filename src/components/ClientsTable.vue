@@ -16,8 +16,8 @@
                             <td>{{ item.country }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>
-                                <v-icon @click="editClient(item)" class="action-button">mdi-pencil</v-icon>
-                                <v-icon @click="deleteClient(item.id)" class="action-button">mdi-delete</v-icon>
+                                <v-icon @click="editClient(item)">mdi-pencil</v-icon>
+                                <v-icon @click="deleteClient(item.id)">mdi-delete</v-icon>
                             </td>
                         </tr>
                     </tbody>
@@ -65,20 +65,20 @@ export default {
             });
         },
         goToAddClient() {
-            this.$router.push({ name: 'AddClient' });
+            this.$router.push({ name: 'Client' });
         },
-        editClient() {
-            //todo
+        editClient(client) {
+            this.$router.push({ name: 'Client', params: { clientData: client } });
         },
         deleteClient(clientId) {
             axios.delete(`http://localhost:8000/api/clients/${clientId}`)
-            .then(response => {
-                this.clients = this.clients.filter(client => client.id !== clientId);
-                window.alert('Usunięto klienta', response);
-            })
-            .catch(error => {
-                console.error('Błąd usuwania klienta:', error);
-            });
+                .then(response => {
+                    this.clients = this.clients.filter(client => client.id !== clientId);
+                    window.alert('Usunięto klienta', response);
+                })
+                .catch(error => {
+                    console.error('Błąd usuwania klienta:', error);
+                });
         },
         getLogoUrl(base64String) {
             return 'data:image/png;base64,' + base64String;

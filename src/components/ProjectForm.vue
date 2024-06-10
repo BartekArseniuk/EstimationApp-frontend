@@ -2,7 +2,7 @@
     <v-app>
         <v-container>
             <v-card class="card">
-                <v-card-title>Dodaj Projekt</v-card-title>
+                <v-card-title>Projekt</v-card-title>
                 <v-card-text>
                     <v-form @submit.prevent="saveProject">
                         <v-text-field v-model="project.name" label="Nazwa Projektu"></v-text-field>
@@ -77,7 +77,7 @@ export default {
             this.$router.push({ name: 'MainView' });
         },
         addNewClient() {
-            this.$router.push({ name: 'AddClient' });
+            this.$router.push({ name: 'Client' });
         }
     }
 };

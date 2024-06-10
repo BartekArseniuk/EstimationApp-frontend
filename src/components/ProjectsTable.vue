@@ -16,8 +16,8 @@
                             <td>{{ item.estimate }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>
-                                <v-icon @click="editProject(item)" class="action-button">mdi-pencil</v-icon>
-                                <v-icon @click="deleteProject(item.id)" class="action-button">mdi-delete</v-icon>
+                                <v-icon @click="editClient(item)">mdi-pencil</v-icon>
+                                <v-icon @click="deleteClient(item.id)">mdi-delete</v-icon>
                             </td>
                         </tr>
                     </tbody>
@@ -67,7 +67,7 @@ export default {
             });
         },
         goToAddProject() {
-            this.$router.push({ name: 'AddProject' });
+            this.$router.push({ name: 'Project' });
         },
         editProject() {
             //todo
