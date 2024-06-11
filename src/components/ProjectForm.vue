@@ -5,12 +5,12 @@
                 <v-card-title>Projekt</v-card-title>
                 <v-card-text>
                     <v-form @submit.prevent="saveProject">
-                        <v-text-field v-model="project.name" label="Nazwa Projektu"></v-text-field>
+                        <v-text-field v-model="project.name" label="Nazwa Projektu *"></v-text-field>
                         <v-text-field v-model="project.description" label="Opis"></v-text-field>
                         <v-row>
                             <v-col cols="6" md="8">
                                 <v-select v-model="project.client" :items="clients" item-text="displayText"
-                                    item-value="id" label="Klient"></v-select>
+                                    item-value="id" label="Klient *"></v-select>
                             </v-col>
                             <v-col cols="2" md="4">
                                 <v-btn color="blue darken-1" dark @click="addNewClient">DODAJ NOWY</v-btn>
@@ -20,6 +20,7 @@
                             <v-btn color="blue darken-1" dark type="submit">Dodaj</v-btn>
                             <v-btn color="red darken-1" dark @click="cancel">Anuluj</v-btn>
                         </v-card-actions>
+                        <v-subheader x-small>* Pole obowiązkowe</v-subheader>
                     </v-form>
                 </v-card-text>
             </v-card>
@@ -64,7 +65,7 @@ export default {
             });
         },
         saveProject() {
-            if (this.project.name && this.project.description && this.project.client) {
+            if (this.project.name && this.project.client) {
                 const formData = {
                     name: this.project.name,
                     description: this.project.description,
@@ -89,7 +90,7 @@ export default {
                     });
                 }
             } else {
-                window.alert('Wypełnij wszystkie pola');
+                window.alert('Wypełnij wymagane pola');
             }
         },
         cancel() {

@@ -5,8 +5,8 @@
                 <v-card-title>Klient</v-card-title>
                 <v-card-text>
                     <v-form @submit.prevent="saveClient">
-                        <v-text-field v-model="client.name" label="Nazwa Klienta*"></v-text-field>
-                        <v-text-field v-model="client.description" label="Opis*"></v-text-field>
+                        <v-text-field v-model="client.name" label="Nazwa Klienta *"></v-text-field>
+                        <v-text-field v-model="client.description" label="Opis *"></v-text-field>
                         <v-row>
                             <v-col cols="10">
                                 <v-file-input v-model="logoFile" label="Logo"
@@ -18,12 +18,13 @@
                                     width="50px"></v-img>
                             </v-col>
                         </v-row>
-                        <v-select v-model="client.country" label="Kraj*" :items="country"></v-select>
-                        <v-text-field v-model="client.email" label="Email*" type="email"></v-text-field>
+                        <v-select v-model="client.country" label="Kraj *" :items="country"></v-select>
+                        <v-text-field v-model="client.email" label="Email *" type="email"></v-text-field>
                         <v-card-actions>
                             <v-btn color="blue darken-1" dark type="submit">Zapisz</v-btn>
                             <v-btn color="red darken-1" dark @click="cancel">Anuluj</v-btn>
                         </v-card-actions>
+                        <v-subheader x-small>* Pole obowiązkowe</v-subheader>
                     </v-form>
                 </v-card-text>
             </v-card>
