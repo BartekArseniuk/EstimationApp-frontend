@@ -52,6 +52,13 @@ export default {
     },
     created() {
         this.fetchProjects();
+
+        if (this.$route.params.estimationData) {
+            this.estimation = this.$route.params.estimationData;
+            if(this.estimation.project) {
+                this.estimation.project = this.estimation.project.id;
+            }
+        }
     },
     methods: {
         fetchProjects() {
@@ -77,13 +84,24 @@ export default {
                     type: this.estimation.type,
                     amount: this.estimation.amount
                 };
-                axios.post('http://localhost:8000/api/estimations', formData).then(response => {
-                    window.alert('Estymacja została dodana pomyślnie', response);
-                    this.$router.push({ name: 'MainView' });
-                })
-                    .catch(error => {
-                        window.alert('Błąd podczas dodawania estymacji', error);
-                    });
+                if (this.estimation.id) {
+                    axios.put(`http://localhost:8000/api/estimations/${this.estimation.id}`, formData)
+                        .then(response => {
+                            window.alert('Wycena została zaktualizowana pomyślnie', response)
+                            this.$router.push({ name: 'MainView' });
+                        })
+                        .catch(error => {
+                            window.alert('Błąd podczas aktualizacji wyceny', error)
+                        });
+                } else {
+                    axios.post('http://localhost:8000/api/estimations', formData).then(response => {
+                        window.alert('Estymacja została dodana pomyślnie', response);
+                        this.$router.push({ name: 'MainView' });
+                    })
+                        .catch(error => {
+                            window.alert('Błąd podczas dodawania estymacji', error);
+                        });
+                }
             } else {
                 window.alert('Wypełnij wszystkie pola');
             }

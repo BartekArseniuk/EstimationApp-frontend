@@ -17,8 +17,8 @@
                             <td>{{ item.amount }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>
-                                <v-icon @click="editClient(item)">mdi-pencil</v-icon>
-                                <v-icon @click="deleteClient(item.id)">mdi-delete</v-icon>
+                                <v-icon @click="editEstimation(item)">mdi-pencil</v-icon>
+                                <v-icon @click="deleteEstimation(item.id)">mdi-delete</v-icon>
                             </td>
                         </tr>
                     </tbody>
@@ -72,8 +72,8 @@ export default {
         goToAddEstimation() {
             this.$router.push({ name: 'Estimation' });
         },
-        editEstimation() {
-            //todo
+        editEstimation(estimation) {
+            this.$router.push({ name: 'Estimation', params: {estimationData: estimation} });
         },
         deleteEstimation(estimationId) {
             axios.delete(`http://localhost:8000/api/estimations/${estimationId}`)

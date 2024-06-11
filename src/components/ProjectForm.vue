@@ -34,6 +34,7 @@ export default {
     data() {
         return {
             project: {
+                id: null,
                 name: '',
                 description: '',
                 client: null
@@ -43,6 +44,13 @@ export default {
     },
     created() {
         this.fetchClients();
+
+        if (this.$route.params.projectData) {
+            this.project = this.$route.params.projectData;
+            if (this.project.client) {
+                this.project.client = this.project.client.id;
+            }
+        }
     },
     methods: {
         fetchClients() {
@@ -62,13 +70,24 @@ export default {
                     description: this.project.description,
                     client_id: this.project.client
                 }
-                axios.post('http://localhost:8000/api/projects', formData).then(response => {
+                if (this.project.id) {
+                    axios.put(`http://localhost:8000/api/projects/${this.project.id}`, formData)
+                    .then(response => {
+                        window.alert('Projekt został zaktualizowany pomyślnie', response);
+                        this.$router.push({ name: 'MainView' });
+                    })
+                    .catch(error => {
+                        window.alert('Błąd podczas aktualizacji projektu', error)
+                    });
+                } else {
+                    axios.post('http://localhost:8000/api/projects', formData).then(response => {
                     window.alert('Projekt został dodany pomyślnie', response);
                     this.$router.push({ name: 'MainView' });
                 })
                     .catch(error => {
                         window.alert('Błąd podczas dodawania projektu', error);
                     });
+                }
             } else {
                 window.alert('Wypełnij wszystkie pola');
             }

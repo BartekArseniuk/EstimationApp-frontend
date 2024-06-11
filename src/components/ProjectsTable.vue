@@ -16,8 +16,8 @@
                             <td>{{ item.estimate }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>
-                                <v-icon @click="editClient(item)">mdi-pencil</v-icon>
-                                <v-icon @click="deleteClient(item.id)">mdi-delete</v-icon>
+                                <v-icon @click="editProject(item)">mdi-pencil</v-icon>
+                                <v-icon @click="deleteProject(item.id)">mdi-delete</v-icon>
                             </td>
                         </tr>
                     </tbody>
@@ -69,8 +69,8 @@ export default {
         goToAddProject() {
             this.$router.push({ name: 'Project' });
         },
-        editProject() {
-            //todo
+        editProject(project) {
+            this.$router.push({ name: 'Project', params: {projectData: project} });
         },
         deleteProject(projectId) {
             axios.delete(`http://localhost:8000/api/projects/${projectId}`)
