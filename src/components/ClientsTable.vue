@@ -3,12 +3,14 @@
         <v-card class="table-card">
             <v-card-title>
                 Lista klientów
-                <v-btn class="add-button" @click="goToAddClient" small color="blue darken-1" dark>Dodaj</v-btn>
+                <v-btn class="add-button" @click="goToAddClient" small color="blue darken-1" dark>
+                    <v-icon>mdi-plus</v-icon>
+                </v-btn>
                 <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
             </v-card-title>
             <v-data-table :headers="headers" :items="filteredClients" :search="search" class="table">
                 <template v-slot:body="{ items }">
-                    <tbody>
+                    <tbody v-if="items.length > 0">
                         <tr v-for="item in items" :key="item.id">
                             <td>{{ item.id }}</td>
                             <td>{{ item.name }}</td>
@@ -21,11 +23,17 @@
                             </td>
                         </tr>
                     </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="6" class="text-center">Aktualnie tabela nie posiada żadnych rekordów.</td>
+                        </tr>
+                    </tbody>
                 </template>
             </v-data-table>
         </v-card>
     </v-app>
 </template>
+
 
 <script>
 

@@ -3,12 +3,14 @@
         <v-card class="table-card">
             <v-card-title>
                 Lista estymacji
-                <v-btn class="add-button" @click="goToAddEstimation" small color="blue darken-1" dark>Dodaj</v-btn>
+                <v-btn class="add-button" @click="goToAddEstimation" small color="blue darken-1" dark>
+                    <v-icon>mdi-plus</v-icon>
+                </v-btn>
                 <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
             </v-card-title>
             <v-data-table :headers="headers" :items="filteredEstimations" :search="search" class="table">
                 <template v-slot:body="{ items }">
-                    <tbody>
+                    <tbody v-if="items.length > 0">
                         <tr v-for="item in items" :key="item.id">
                             <td>{{ item.id }}</td>
                             <td>{{ item.name }}</td>
@@ -20,6 +22,11 @@
                                 <v-icon @click="editEstimation(item)">mdi-pencil</v-icon>
                                 <v-icon @click="deleteEstimation(item.id)">mdi-delete</v-icon>
                             </td>
+                        </tr>
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="7" class="text-center">Aktualnie tabela nie posiada żadnych rekordów.</td>
                         </tr>
                     </tbody>
                 </template>
