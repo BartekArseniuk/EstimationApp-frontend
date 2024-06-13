@@ -8,7 +8,7 @@
                 </v-btn>
                 <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="filteredEstimations" :search="search" class="table">
+            <v-data-table :headers="headers" :items="filteredEstimations" :items-per-page="5" :search="search" class="table">
                 <template v-slot:body="{ items }">
                     <tbody v-if="items.length > 0">
                         <tr v-for="item in items" :key="item.id">

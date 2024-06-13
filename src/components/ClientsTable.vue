@@ -8,7 +8,7 @@
                 </v-btn>
                 <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="filteredClients" :search="search" class="table">
+            <v-data-table :headers="headers" :items="filteredClients" :items-per-page="5" :search="search" class="table">
                 <template v-slot:body="{ items }">
                     <tbody v-if="items.length > 0">
                         <tr v-for="item in items" :key="item.id">
@@ -34,9 +34,7 @@
     </v-app>
 </template>
 
-
 <script>
-
 import axios from 'axios';
 
 export default {
@@ -66,11 +64,13 @@ export default {
     },
     methods: {
         fetchClients() {
-            axios.get('http://localhost:8000/api/clients').then(response => {
-                this.clients = response.data;
-            }).catch(error => {
-                console.error('Błąd pobierania klientów:', error);
-            });
+            axios.get('http://localhost:8000/api/clients')
+                .then(response => {
+                    this.clients = response.data;
+                })
+                .catch(error => {
+                    console.error('Błąd pobierania klientów:', error);
+                });
         },
         goToAddClient() {
             this.$router.push({ name: 'Client' });
@@ -79,13 +79,31 @@ export default {
             this.$router.push({ name: 'Client', params: { clientData: client } });
         },
         deleteClient(clientId) {
-            axios.delete(`http://localhost:8000/api/clients/${clientId}`)
+            axios.get('http://localhost:8000/api/projects')
                 .then(response => {
-                    this.clients = this.clients.filter(client => client.id !== clientId);
-                    window.alert('Usunięto klienta', response);
+                    const projects = response.data;
+                    const clientProjects = projects.filter(project => project.client_id === clientId);
+
+                    console.log('Client projects:', clientProjects);
+
+                    if (clientProjects.length > 0) {
+                        const confirmDelete = window.confirm('Klient ma przypisane projekty. Jeśli usuniesz klienta, jego projekty również zostaną usunięte. Czy na pewno chcesz kontynuować?');
+                        if (!confirmDelete) {
+                            return;
+                        }
+                    }
+
+                    axios.delete(`http://localhost:8000/api/clients/${clientId}`)
+                        .then(() => {
+                            this.clients = this.clients.filter(client => client.id !== clientId);
+                            window.alert('Usunięto klienta');
+                        })
+                        .catch(error => {
+                            console.error('Błąd usuwania klienta:', error);
+                        });
                 })
                 .catch(error => {
-                    console.error('Błąd usuwania klienta:', error);
+                    console.error('Błąd pobierania projektów:', error);
                 });
         },
         getLogoUrl(base64String) {
