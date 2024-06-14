@@ -1,133 +1,149 @@
 <template>
-    <v-app>
-        <v-container>
-            <v-card class="card">
-                <v-card-title>Klient</v-card-title>
-                <v-card-text>
-                    <v-form @submit.prevent="saveClient">
-                        <v-text-field v-model="client.name" label="Nazwa Klienta *"></v-text-field>
-                        <v-text-field v-model="client.description" label="Opis *"></v-text-field>
-                        <v-row>
-                            <v-col cols="10">
-                                <v-file-input v-model="logoFile" label="Logo"
-                                    @change="updateLogoPreview"></v-file-input>
-                            </v-col>
-                            <v-col cols="2">
-                                <v-img v-if="client.logoPreview"
-                                    :src="client.logoPreview" height="50px"
-                                    width="50px"></v-img>
-                            </v-col>
-                        </v-row>
-                        <v-select v-model="client.country" label="Kraj *" :items="country"></v-select>
-                        <v-text-field v-model="client.email" label="Email *" type="email"></v-text-field>
-                        <v-card-actions>
-                            <v-btn color="grey darken-4" dark type="submit">Zapisz</v-btn>
-                            <v-btn color="grey darken-4" dark @click="cancel">Anuluj</v-btn>
-                        </v-card-actions>
-                        <v-subheader x-small>* Pole obowiązkowe</v-subheader>
-                    </v-form>
-                </v-card-text>
-            </v-card>
-        </v-container>
-    </v-app>
+  <v-card>
+    <v-card-title v-if="!editingMode">Dodaj nowego klienta</v-card-title>
+    <v-card-title v-else>Edytuj klienta</v-card-title>
+    <v-card-text>
+      <v-form @submit.prevent="saveClient">
+        <v-text-field v-model="client.name" label="Nazwa Klienta *"></v-text-field>
+        <v-text-field v-model="client.description" label="Opis *"></v-text-field>
+        <v-row>
+          <v-col cols="10">
+            <v-file-input v-model="logoFile" label="Logo" @change="updateLogoPreview"></v-file-input>
+          </v-col>
+          <v-col cols="2">
+            <v-img v-if="client.logoPreview" :src="client.logoPreview" height="50px" width="50px"></v-img>
+          </v-col>
+        </v-row>
+        <v-select v-model="client.country" label="Kraj *" :items="country"></v-select>
+        <v-text-field v-model="client.email" label="Email *" type="email"></v-text-field>
+        <v-card-actions>
+          <v-btn color="grey darken-4" dark type="submit">{{ editingMode ? 'Zapisz zmiany' : 'Dodaj klienta' }}</v-btn>
+          <v-btn color="grey darken-4" dark @click="cancel">Anuluj</v-btn>
+        </v-card-actions>
+        <v-subheader x-small>* Pole obowiązkowe</v-subheader>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
-
 import axios from 'axios';
 
 export default {
-    data() {
-        return {
-            client: {
-                id: null,
-                name: '',
-                description: '',
-                logo: null,
-                country: null,
-                email: '',
-                logoPreview: null
-            },
-            country: ['Poland', 'USA', 'Canada', 'UK', 'Germany', 'France', 'Italy', 'Spain', 'Australia'],
-            logoFile: null
+  props: {
+    editingMode: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
+    return {
+      client: {
+        id: null,
+        name: '',
+        description: '',
+        logo: null,
+        country: null,
+        email: '',
+        logoPreview: null
+      },
+      country: ['Poland', 'USA', 'Canada', 'UK', 'Germany', 'France', 'Italy', 'Spain', 'Australia'],
+      logoFile: null
+    };
+  },
+  methods: {
+    saveClient() {
+      if (this.client.name && this.client.description && this.client.country && this.client.email) {
+        const formData = {
+          name: this.client.name,
+          description: this.client.description,
+          logo: this.client.logoBase64,
+          country: this.client.country,
+          email: this.client.email,
         };
-    },
-    created() {
-        if (this.$route.params.clientData) {
-            this.client = this.$route.params.clientData;
-            if (this.client.logo) {
-                this.client.logoPreview = 'data:image/png;base64,' + this.client.logo;
-            }
+
+        if (this.editingMode) {
+          axios.put(`http://localhost:8000/api/clients/${this.client.id}`, formData)
+            .then(response => {
+              window.alert('Klient został zaktualizowany pomyślnie');
+              this.$emit('client-updated', response.data);
+            })
+            .catch(error => {
+              console.error('Błąd podczas aktualizacji klienta:', error);
+              window.alert('Błąd podczas aktualizacji klienta');
+            });
+        } else {
+          axios.post('http://localhost:8000/api/clients', formData)
+            .then(response => {
+              window.alert('Klient został dodany pomyślnie');
+              this.$emit('client-added', response.data);
+              this.resetForm();
+            })
+            .catch(error => {
+              console.error('Błąd podczas dodawania klienta:', error);
+              window.alert('Błąd podczas dodawania klienta');
+            });
         }
+      } else {
+        window.alert('Wypełnij wymagane pola');
+      }
     },
+    cancel() {
+      this.resetForm();
+      this.$emit('cancel');
+    },
+    updateLogoPreview() {
+      const file = this.logoFile;
+      const reader = new FileReader();
 
-    methods: {
-        saveClient() {
-            if (this.client.name && this.client.description && this.client.country && this.client.email) {
-                const formData = {
-                    name: this.client.name,
-                    description: this.client.description,
-                    logo: this.client.logoBase64,
-                    country: this.client.country,
-                    email: this.client.email
-                };
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
 
-                if (this.client.id) {
-                    axios.put(`http://localhost:8000/api/clients/${this.client.id}`, formData)
-                        .then(response => {
-                            window.alert('Klient został zaktualizowany pomyślnie', response);
-                            this.$router.push({ name: 'MainView' });
-                        })
-                        .catch(error => {
-                            window.alert('Błąd podczas aktualizacji klienta', error);
-                        });
-                } else {
-                    axios.post('http://localhost:8000/api/clients', formData)
-                        .then(response => {
-                            window.alert('Klient został dodany pomyślnie', response);
-                            this.$router.push({ name: 'MainView' });
-                        })
-                        .catch(error => {
-                            window.alert('Błąd podczas dodawania klienta', error);
-                        });
-                }
-            } else {
-                window.alert('Wypełnij wymagane pola');
-            }
-        },
-        cancel() {
-            this.$router.push({ name: 'MainView' });
-        },
-        updateLogoPreview() {
-            const file = this.logoFile;
-            const reader = new FileReader();
+          canvas.width = 50;
+          canvas.height = 50;
 
-            reader.onload = () => {
-                const img = new Image();
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, 50, 50);
 
-                    canvas.width = 50;
-                    canvas.height = 50;
+          this.client.logoBase64 = canvas.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '');
+          this.client.logoPreview = canvas.toDataURL();
+        };
+        img.src = reader.result;
+      };
 
-                    ctx.drawImage(img, 0, 0, 50, 50);
-
-                    this.client.logoBase64 = canvas.toDataURL().replace(/^data:image\/(png|jpg);base64,/, '');
-                    this.client.logoPreview = canvas.toDataURL();
-                    this.$forceUpdate();
-                };
-                img.src = reader.result;
-            };
-
-            if (file) {
-                reader.readAsDataURL(file);
-            }
-        }
-    }
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    },
+    resetForm() {
+      this.client = {
+        id: null,
+        name: '',
+        description: '',
+        logo: null,
+        country: null,
+        email: '',
+        logoPreview: null,
+      };
+      this.logoFile = null;
+    },
+    editClient(client) {
+      this.client.id = client.id;
+      this.client.name = client.name;
+      this.client.description = client.description;
+      this.client.country = client.country;
+      this.client.email = client.email;
+      this.client.logoPreview = client.logo ? this.getLogoUrl(client.logo) : null;
+    },
+    getLogoUrl(base64String) {
+      return 'data:image/png;base64,' + base64String;
+    },
+  },
 };
 </script>
 
-<style lang="scss">
+<style>
 @import '../styles/forms.scss'
 </style>
