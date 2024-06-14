@@ -13,18 +13,18 @@
                                     item-text="displayText" item-value="id" dense></v-select>
                             </v-col>
                             <v-col cols="2" md="4">
-                                <v-btn color="blue darken-1" dark @click="addNewProject" small>DODAJ NOWY</v-btn>
+                                <v-btn color="grey darken-4" dark @click="addNewProject" small>DODAJ NOWY</v-btn>
                             </v-col>
                         </v-row>
                         <v-text-field v-model="estimation.date" label="Data *" type="date" dense></v-text-field>
                         <v-radio-group v-model="estimation.type" label="Rodzaj wyceny *" dense>
-                            <v-radio label="Godzinowa" value="hourly"></v-radio>
-                            <v-radio label="Ustalona kwota" value="fixed_price"></v-radio>
+                            <v-radio label="Godzinowa" value="hourly" color="grey darken-4"></v-radio>
+                            <v-radio label="Ustalona kwota" value="fixed_price" color="grey darken-4"></v-radio>
                         </v-radio-group>
                         <v-text-field v-model="estimation.amount" label="Wycena *" dense></v-text-field>
                         <v-card-actions>
-                            <v-btn color="blue darken-1" dark type="submit" large>Dodaj</v-btn>
-                            <v-btn color="red darken-1" dark @click="cancel" large>Anuluj</v-btn>
+                            <v-btn color="grey darken-4" dark type="submit" large>Dodaj</v-btn>
+                            <v-btn color="grey darken-4" dark @click="cancel" large>Anuluj</v-btn>
                         </v-card-actions>
                         <v-subheader x-small>* Pole obowiązkowe</v-subheader>
                     </v-form>

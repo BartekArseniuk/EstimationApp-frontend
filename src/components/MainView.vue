@@ -1,15 +1,65 @@
 <template>
   <v-app>
-    <v-app-bar app color="blue darken-1" dark>
-      <v-toolbar-title>
-        <v-img src="/logo.png" height="50px" width="50px"></v-img>
-      </v-toolbar-title>
-      <v-btn text @click="showAbout" small>Info</v-btn>
-      <v-spacer></v-spacer>
-      <v-btn text @click="showClientsTable" small>Klienci</v-btn>
-      <v-btn text @click="showProjectsTable" small>Projekty</v-btn>
-      <v-btn text @click="showEstimationsTable" small>Wyceny</v-btn>
-    </v-app-bar>
+    <v-navigation-drawer app color="grey darken-4" dark>
+      <v-list>
+        <v-list-item>
+          <v-img src="/logo.png" class="logo"></v-img>
+          <v-list-item-title class="title">EstimationApp</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="showClientsTable" :value="'clients'">
+          <v-list-item-icon>
+            <v-icon>mdi-account-multiple</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Klienci</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="showProjectsTable" :value="'projects'">
+          <v-list-item-icon>
+            <v-icon>mdi-folder</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Projekty</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="showEstimationsTable" :value="'estimations'">
+          <v-list-item-icon>
+            <v-icon>mdi-chart-bar</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Wyceny</v-list-item-title>
+        </v-list-item>
+        <v-list-item @click="showAbout" :value="'about'">
+          <v-list-item-icon>
+            <v-icon>mdi-information</v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>Info</v-list-item-title>
+        </v-list-item>
+      </v-list>
+      <template v-slot:append>
+        <v-divider></v-divider>
+        <v-list>
+          <v-menu>
+            <template v-slot:activator="{ on, attrs }">
+              <v-list-item v-bind="attrs" v-on="on">
+                <v-avatar size="40px">
+                  <v-img src="/logo.png"></v-img>
+                </v-avatar>
+                <v-list-item-content class="ml-2">
+                  <v-list-item-title>User</v-list-item-title>
+                </v-list-item-content>
+                <v-icon>mdi-menu-up</v-icon>
+              </v-list-item>
+            </template>
+            <v-list>
+              <v-list-item @click="addNewUser">
+                <v-list-item-action>
+                  <v-icon>mdi-plus</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>Dodaj nowego użytkownika</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-list>
+      </template>
+    </v-navigation-drawer>
     <v-main>
       <v-container>
         <ClientsTable v-if="selectedComponent === 'clients'" />
@@ -51,7 +101,23 @@ export default {
     },
     showAbout() {
       this.selectedComponent = 'about';
+    },
+    addNewUser() {
+      //todo
     }
   }
 };
 </script>
+
+<style scoped>
+.logo {
+  height: 50px;
+  width: 50px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+}
+.title {
+  font-size: 18px;
+  font-weight: bold;
+}
+</style>

@@ -1,10 +1,13 @@
 <template>
     <v-app>
+        <v-card-title>
+            Wyceny
+        </v-card-title>
         <v-card class="table-card">
             <v-card-title>
-                Lista estymacji
-                <v-btn class="add-button" @click="goToAddEstimation" small color="blue darken-1" dark>
+                <v-btn class="add-button" @click="goToAddEstimation" small color="grey darken-4" dark>
                     <v-icon>mdi-plus</v-icon>
+                    Dodaj wycenę
                 </v-btn>
                 <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
             </v-card-title>

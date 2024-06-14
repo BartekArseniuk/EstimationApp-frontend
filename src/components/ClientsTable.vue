@@ -1,14 +1,18 @@
 <template>
     <v-app>
+        <v-card-title>
+            Klienci
+        </v-card-title>
         <v-card class="table-card">
             <v-card-title>
-                Lista klientów
-                <v-btn class="add-button" @click="goToAddClient" small color="blue darken-1" dark>
+                <v-btn class="add-button" @click="goToAddClient" small color="grey darken-4" dark>
                     <v-icon>mdi-plus</v-icon>
+                    Dodaj klienta
                 </v-btn>
                 <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
             </v-card-title>
-            <v-data-table :headers="headers" :items="filteredClients" :items-per-page="5" :search="search" class="table">
+            <v-data-table :headers="headers" :items="filteredClients" :items-per-page="5" :search="search"
+                class="table">
                 <template v-slot:body="{ items }">
                     <tbody v-if="items.length > 0">
                         <tr v-for="item in items" :key="item.id">

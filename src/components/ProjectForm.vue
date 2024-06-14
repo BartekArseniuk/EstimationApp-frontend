@@ -13,12 +13,12 @@
                                     item-value="id" label="Klient *"></v-select>
                             </v-col>
                             <v-col cols="2" md="4">
-                                <v-btn color="blue darken-1" dark @click="addNewClient">DODAJ NOWY</v-btn>
+                                <v-btn color="grey darken-4" dark @click="addNewClient">DODAJ NOWY</v-btn>
                             </v-col>
                         </v-row>
                         <v-card-actions>
-                            <v-btn color="blue darken-1" dark type="submit">Dodaj</v-btn>
-                            <v-btn color="red darken-1" dark @click="cancel">Anuluj</v-btn>
+                            <v-btn color="grey darken-4" dark type="submit">Dodaj</v-btn>
+                            <v-btn color="grey darken-4" dark @click="cancel">Anuluj</v-btn>
                         </v-card-actions>
                         <v-subheader x-small>* Pole obowiązkowe</v-subheader>
                     </v-form>

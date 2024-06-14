@@ -2,7 +2,7 @@
     <v-container>
       <v-row>
         <v-col cols="12">
-          <v-card class="main-card" color="blue dark" dark>
+          <v-card class="main-card" color="grey darken-4" dark>
             <v-card-title>
               EstimationApp - Narzędzie do zarządzania projektami
             </v-card-title>
@@ -28,7 +28,7 @@
         <v-col cols="12" md="4">
           <v-card class="card2">
             <v-card-title>
-              <v-icon size="64" left>mdi-briefcase</v-icon>
+              <v-icon size="64" left>mdi-folder</v-icon>
               Projekty
             </v-card-title>
             <v-card-text>
@@ -43,7 +43,7 @@
         <v-col cols="12" md="4">
           <v-card class="card3">
             <v-card-title>
-              <v-icon size="64" left>mdi-cash</v-icon>
+              <v-icon size="64" left>mdi-chart-bar</v-icon>
               Wyceny
             </v-card-title>
             <v-card-text>
