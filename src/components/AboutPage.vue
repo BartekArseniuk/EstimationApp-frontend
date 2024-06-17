@@ -2,7 +2,7 @@
     <v-container>
       <v-row>
         <v-col cols="12">
-          <v-card class="main-card" color="grey darken-4" dark>
+          <v-card class="main-card" color="grey darken-3" dark>
             <v-card-title>
               EstimationApp - Narzędzie do zarządzania projektami
             </v-card-title>

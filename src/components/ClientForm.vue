@@ -17,8 +17,8 @@
         <v-select v-model="client.country" label="Kraj *" :items="country"></v-select>
         <v-text-field v-model="client.email" label="Email *" type="email"></v-text-field>
         <v-card-actions>
-          <v-btn color="grey darken-4" dark type="submit">{{ editingMode ? 'Zapisz zmiany' : 'Dodaj klienta' }}</v-btn>
-          <v-btn color="grey darken-4" dark @click="cancel">Anuluj</v-btn>
+          <v-btn color="grey darken-3" dark type="submit">{{ editingMode ? 'Zapisz zmiany' : 'Dodaj klienta' }}</v-btn>
+          <v-btn color="grey darken-3" dark @click="cancel">Anuluj</v-btn>
         </v-card-actions>
         <v-subheader x-small>* Pole obowiązkowe</v-subheader>
       </v-form>

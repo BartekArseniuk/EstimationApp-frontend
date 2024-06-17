@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <v-navigation-drawer app color="grey darken-4" dark>
+    <v-navigation-drawer app color="grey darken-3" dark>
       <v-list>
         <v-list-item>
           <v-img src="/logo.png" class="logo"></v-img>
-          <v-list-item-title class="title">EstimationApp</v-list-item-title>
+          <v-list-item-title>EstimationApp</v-list-item-title>
         </v-list-item>
         <v-list-item @click="showClientsTable" :value="'clients'">
           <v-list-item-icon>
@@ -109,15 +109,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .logo {
   height: 50px;
   width: 50px;
   margin-right: 10px;
   margin-bottom: 5px;
-}
-.title {
-  font-size: 18px;
-  font-weight: bold;
 }
 </style>

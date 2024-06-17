@@ -1,11 +1,20 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <MainView/>
   </div>
 </template>
 
 <script>
+import MainView from './components/MainView.vue';
 export default {
-  name: 'App'
+  components: {
+    MainView
+  }
 };
 </script>
+
+<style>
+#app {
+  background-color: #f8f9fa;
+}
+</style>
