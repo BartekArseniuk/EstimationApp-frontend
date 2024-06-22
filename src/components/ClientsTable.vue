@@ -39,7 +39,7 @@
 
 <script>
 import axios from 'axios';
-import ClientForm from './ClientForm.vue';
+import ClientForm from './Modals/ClientForm.vue';
 
 export default {
   data() {

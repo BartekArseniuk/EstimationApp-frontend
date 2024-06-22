@@ -1,5 +1,5 @@
   <template>
-    <v-container>
+    <v-container class="homePage">
       <v-row>
         <v-col cols="12">
           <v-card class="main-card" color="grey darken-3" dark>
@@ -67,5 +67,9 @@
 
 .main-card {
   border-radius: 20px !important;
+}
+
+.homePage {
+  margin-top: 50px;
 }
 </style>

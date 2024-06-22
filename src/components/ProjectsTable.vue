@@ -48,7 +48,7 @@
 
 <script>
 import axios from 'axios';
-import ProjectForm from './ProjectForm.vue';
+import ProjectForm from './Modals/ProjectForm.vue';
 
 export default {
   data() {

@@ -145,5 +145,5 @@ export default {
 </script>
 
 <style>
-@import '../styles/forms.scss'
+@import '../../styles/forms.scss'
 </style>

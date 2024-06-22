@@ -46,7 +46,7 @@
 <script>
 
 import axios from 'axios';
-import EstimationForm from './EstimationForm.vue';
+import EstimationForm from './Modals/EstimationForm.vue';
 
 export default {
     data() {
