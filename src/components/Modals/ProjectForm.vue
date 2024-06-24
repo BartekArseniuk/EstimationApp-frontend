@@ -8,7 +8,8 @@
         <v-text-field v-model="project.description" label="Opis"></v-text-field>
         <v-row>
           <v-col cols="6" md="8">
-            <v-select v-model="project.client" :items="clients" item-text="displayText" item-value="id" label="Klient *"></v-select>
+            <v-select v-model="project.client" :items="clients" item-text="displayText" item-value="id"
+              label="Klient *"></v-select>
           </v-col>
           <v-col cols="2" md="4">
             <v-btn color="grey darken-3" dark @click="openClientForm">DODAJ NOWY</v-btn>
@@ -23,11 +24,7 @@
     </v-card-text>
 
     <v-dialog v-model="clientFormOpen">
-      <ClientForm
-        :editingMode="false"
-        @client-added="handleClientAdded"
-        @cancel="closeClientForm"
-      />
+      <ClientForm :editingMode="false" @client-added="handleClientAdded" @cancel="closeClientForm" />
     </v-dialog>
   </v-card>
 </template>

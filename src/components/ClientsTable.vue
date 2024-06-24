@@ -3,7 +3,8 @@
     <v-card-title>Klienci</v-card-title>
     <v-card class="table-card">
       <v-card-title>
-        <v-btn class="add-button" @click="openModal" small color="grey darken-3" dark><v-icon>mdi-plus</v-icon>Dodaj klienta</v-btn>
+        <v-btn v-if="isAdmin" class="add-button" @click="openModal" small color="grey darken-3" dark>
+          <v-icon>mdi-plus</v-icon>Dodaj klienta</v-btn>
         <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
       </v-card-title>
       <v-data-table :headers="headers" :items="filteredClients" :items-per-page="5" :search="search" class="table">
@@ -15,10 +16,11 @@
               <td><img v-if="client.logo" :src="getLogoUrl(client.logo)" height="50px" width="50px"></td>
               <td>{{ client.country }}</td>
               <td>{{ client.created_at }}</td>
-              <td>
+              <td v-if="isAdmin">
                 <v-icon @click="editClient(client)">mdi-pencil</v-icon>
                 <v-icon @click="deleteClient(client.id)">mdi-delete</v-icon>
               </td>
+              <td v-else>Brak uprawnień</td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -42,6 +44,12 @@ import axios from 'axios';
 import ClientForm from './Modals/ClientForm.vue';
 
 export default {
+  props: {
+    isAdmin: {
+      type: Boolean,
+      required: true
+    }
+  },
   data() {
     return {
       search: '',
@@ -74,14 +82,14 @@ export default {
   },
   methods: {
     fetchClients() {
-  axios.get('http://localhost:8000/api/clients')
-    .then(response => {
-      this.clients = response.data;
-    })
-    .catch(error => {
-      console.error('Błąd pobierania klientów:', error);
-    });
-},
+      axios.get('http://localhost:8000/api/clients')
+        .then(response => {
+          this.clients = response.data;
+        })
+        .catch(error => {
+          console.error('Błąd pobierania klientów:', error);
+        });
+    },
     openModal() {
       this.modalOpen = true;
       this.editingMode = false;

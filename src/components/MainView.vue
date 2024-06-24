@@ -59,14 +59,14 @@
 
     <v-main>
       <v-container>
-        <ClientsTable v-if="selectedComponent === 'clients'" />
-        <ProjectsTable v-if="selectedComponent === 'projects'" />
-        <EstimationsTable v-if="selectedComponent === 'estimations'" />
+        <ClientsTable v-if="selectedComponent === 'clients'" :isAdmin="isAdmin" />
+        <ProjectsTable v-if="selectedComponent === 'projects'" :isAdmin="isAdmin" />
+        <EstimationsTable v-if="selectedComponent === 'estimations'" :isAdmin="isAdmin" />
         <HomePage v-if="selectedComponent === 'home'" />
         <AdminPanel v-if="selectedComponent === 'adminPanel' && isAdmin" />
       </v-container>
     </v-main>
-    
+
     <v-dialog v-model="loginModalOpen">
       <LoginForm @close="loginModalOpen = false" @login-success="handleLoginSuccess" />
     </v-dialog>

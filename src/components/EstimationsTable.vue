@@ -3,9 +3,8 @@
         <v-card-title>Wyceny</v-card-title>
         <v-card class="table-card">
             <v-card-title>
-                <v-btn class="add-button" @click="openModal" small color="grey darken-3" dark>
-                    <v-icon>mdi-plus</v-icon>
-                    Dodaj wycenę
+                <v-btn v-if="isAdmin" class="add-button" @click="openModal" small color="grey darken-3" dark>
+                    <v-icon>mdi-plus</v-icon>Dodaj wycenę
                 </v-btn>
                 <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
             </v-card-title>
@@ -20,10 +19,11 @@
                             <td>{{ estimation.client?.name }}</td>
                             <td>{{ estimation.amount }}</td>
                             <td>{{ estimation.created_at }}</td>
-                            <td>
+                            <td v-if="isAdmin">
                                 <v-icon @click="editEstimation(estimation)">mdi-pencil</v-icon>
                                 <v-icon @click="deleteEstimation(estimation.id)">mdi-delete</v-icon>
                             </td>
+                            <td v-else>Brak uprawnień</td>
                         </tr>
                     </tbody>
                     <tbody v-else>
@@ -49,6 +49,12 @@ import axios from 'axios';
 import EstimationForm from './Modals/EstimationForm.vue';
 
 export default {
+    props: {
+        isAdmin: {
+            type: Boolean,
+            required: true
+        }
+    },
     data() {
         return {
             search: '',

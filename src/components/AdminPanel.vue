@@ -2,13 +2,15 @@
   <v-container>
     <v-card-title class="title">Panel Administratora</v-card-title>
     <v-card-title>
-      <v-btn color="grey darken-3" dark small @click="openRegisterModal"><v-icon>mdi-plus</v-icon>Dodaj użytkownika</v-btn>
+      <v-btn color="grey darken-3" dark small @click="openRegisterModal"><v-icon>mdi-plus</v-icon>Dodaj
+        użytkownika</v-btn>
     </v-card-title>
     <v-card class="table-card">
       <v-data-table :headers="headers" :items="users" :items-per-page="5" class="table">
         <template v-slot:body="{ items }">
           <tbody v-if="items.length > 0">
-            <tr v-for="(user, index) in items" :key="user.id" :class="{ 'inactive-row': index === 0 && !user.isActive }">
+            <tr v-for="(user, index) in items" :key="user.id"
+              :class="{ 'inactive-row': index === 0 && !user.isActive }">
               <td>{{ user.id }}</td>
               <td>{{ user.name }}</td>
               <td>{{ user.email }}</td>

@@ -3,9 +3,8 @@
     <v-card-title>Projekty</v-card-title>
     <v-card class="table-card">
       <v-card-title>
-        <v-btn class="add-button" @click="openModal" small color="grey darken-3" dark>
-          <v-icon>mdi-plus</v-icon>
-          Dodaj projekt
+        <v-btn v-if="isAdmin" class="add-button" @click="openModal" small color="grey darken-3" dark>
+          <v-icon>mdi-plus</v-icon>Dodaj klienta
         </v-btn>
         <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
       </v-card-title>
@@ -18,10 +17,11 @@
               <td>{{ project.client?.name }}</td>
               <td>{{ project.estimate }}</td>
               <td>{{ project.created_at }}</td>
-              <td>
+              <td v-if="isAdmin">
                 <v-icon @click="editProject(project)">mdi-pencil</v-icon>
                 <v-icon @click="deleteProject(project.id)">mdi-delete</v-icon>
               </td>
+              <td v-else>Brak uprawnień</td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -34,14 +34,8 @@
     </v-card>
 
     <v-dialog v-model="modalOpen">
-      <ProjectForm
-        :editingMode="editingMode"
-        :editedProjectId="editedProjectId"
-        @project-added="handleProjectAdded"
-        @project-updated="handleProjectUpdated"
-        @cancel="closeModal"
-        ref="projectForm"
-      />
+      <ProjectForm :editingMode="editingMode" :editedProjectId="editedProjectId" @project-added="handleProjectAdded"
+        @project-updated="handleProjectUpdated" @cancel="closeModal" ref="projectForm" />
     </v-dialog>
   </v-container>
 </template>
@@ -51,6 +45,12 @@ import axios from 'axios';
 import ProjectForm from './Modals/ProjectForm.vue';
 
 export default {
+  props: {
+    isAdmin: {
+      type: Boolean,
+      required: true
+    }
+  },
   data() {
     return {
       search: '',

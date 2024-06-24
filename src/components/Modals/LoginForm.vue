@@ -4,13 +4,8 @@
     <v-card-text>
       <v-form @submit.prevent="login">
         <v-text-field v-model="email" label="Email" type="email"></v-text-field>
-        <v-text-field
-          v-model="password"
-          label="Hasło"
-          :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="showPassword ? 'text' : 'password'"
-          @click:append="showPassword = !showPassword"
-        ></v-text-field>
+        <v-text-field v-model="password" label="Hasło" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="showPassword ? 'text' : 'password'" @click:append="showPassword = !showPassword"></v-text-field>
         <v-card-actions>
           <v-btn color="grey darken-3" dark type="submit">Zaloguj</v-btn>
         </v-card-actions>
@@ -41,7 +36,7 @@ export default {
         .then(response => {
           const token = response.data.token;
           const user = response.data.user;
-          
+
           localStorage.setItem('token', token);
           this.$emit('login-success', user);
           this.clearForm();
