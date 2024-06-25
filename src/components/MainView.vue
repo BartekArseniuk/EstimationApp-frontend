@@ -64,6 +64,16 @@
             <EstimationsTable v-if="selectedComponent === 'estimations'" :isAdmin="isAdmin" />
             <HomePage v-if="selectedComponent === 'home'" />
             <AdminPanel v-if="selectedComponent === 'adminPanel' && isAdmin" />
+
+            <v-row v-if="showNavigationArrows" class="navigation-arrows">
+                <v-btn icon @click="showPreviousComponent" :disabled="currentComponentIndex === 0" class="arrow-btn">
+                    <v-icon>mdi-chevron-left</v-icon>
+                </v-btn>
+
+                <v-btn icon @click="showNextComponent" :disabled="currentComponentIndex === componentsList.length - 1" class="arrow-btn">
+                    <v-icon>mdi-chevron-right</v-icon>
+                </v-btn>
+            </v-row>
         </v-container>
     </v-main>
 
@@ -72,7 +82,8 @@
     </v-dialog>
 </v-app>
 </template>
-    
+
+  
 <script>
 import ClientsTable from './Tables/ClientsTable.vue';
 import ProjectsTable from './Tables/ProjectsTable.vue';
@@ -90,6 +101,8 @@ export default {
             isLoggedIn: false,
             userName: '',
             isAdmin: false,
+            componentsList: ['clients', 'projects', 'estimations'],
+            currentComponentIndex: 0,
         };
     },
     components: {
@@ -103,15 +116,23 @@ export default {
     created() {
         this.checkLoginStatus();
     },
+    computed: {
+        showNavigationArrows() {
+            return this.selectedComponent !== 'home' && this.selectedComponent !== 'adminPanel';
+        },
+    },
     methods: {
         showClientsTable() {
             this.selectedComponent = 'clients';
+            this.currentComponentIndex = this.componentsList.indexOf('clients');
         },
         showProjectsTable() {
             this.selectedComponent = 'projects';
+            this.currentComponentIndex = this.componentsList.indexOf('projects');
         },
         showEstimationsTable() {
             this.selectedComponent = 'estimations';
+            this.currentComponentIndex = this.componentsList.indexOf('estimations');
         },
         showHome() {
             this.selectedComponent = 'home';
@@ -148,10 +169,23 @@ export default {
                 this.isAdmin = parsedUser.role === 'admin';
             }
         },
+        showPreviousComponent() {
+            if (this.currentComponentIndex > 0) {
+                this.currentComponentIndex--;
+                this.selectedComponent = this.componentsList[this.currentComponentIndex];
+            }
+        },
+        showNextComponent() {
+            if (this.currentComponentIndex < this.componentsList.length - 1) {
+                this.currentComponentIndex++;
+                this.selectedComponent = this.componentsList[this.currentComponentIndex];
+            }
+        },
     },
 };
 </script>
-    
+
+  
 <style>
 .toggle-button {
     position: fixed;
@@ -171,5 +205,21 @@ export default {
     margin-left: 20px;
     transition: margin-left 0.3s ease;
     font-weight: bold;
+}
+
+.navigation-arrows {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.arrow-btn {
+    border-radius: 50%;
+    margin: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.arrow-btn:disabled {
+    background-color: #E0E0E0;
 }
 </style>
