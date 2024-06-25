@@ -11,31 +11,31 @@
                 <v-img src="/logo.png" class="logo"></v-img>
                 <v-list-item-title>EstimationApp</v-list-item-title>
             </v-list-item>
-            <v-list-item @click="showHome" :value="'home'">
+            <v-list-item @click="showHome" :value="'home'" :class="{ 'selected-item': selectedComponent === 'home' }">
                 <v-list-item-icon>
                     <v-icon>mdi-home</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Ekran główny</v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="isLoggedIn" @click="showClientsTable" :value="'clients'">
+            <v-list-item v-if="isLoggedIn" @click="showClientsTable" :value="'clients'" :class="{ 'selected-item': selectedComponent === 'clients' }">
                 <v-list-item-icon>
                     <v-icon>mdi-account-multiple</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Klienci</v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="isLoggedIn" @click="showProjectsTable" :value="'projects'">
+            <v-list-item v-if="isLoggedIn" @click="showProjectsTable" :value="'projects'" :class="{ 'selected-item': selectedComponent === 'projects' }">
                 <v-list-item-icon>
                     <v-icon>mdi-folder</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Projekty</v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="isLoggedIn" @click="showEstimationsTable" :value="'estimations'">
+            <v-list-item v-if="isLoggedIn" @click="showEstimationsTable" :value="'estimations'" :class="{ 'selected-item': selectedComponent === 'estimations' }">
                 <v-list-item-icon>
                     <v-icon>mdi-chart-bar</v-icon>
                 </v-list-item-icon>
                 <v-list-item-title>Wyceny</v-list-item-title>
             </v-list-item>
-            <v-list-item v-if="isLoggedIn && isAdmin" @click="showAdminPanel" :value="'adminPanel'">
+            <v-list-item v-if="isLoggedIn && isAdmin" @click="showAdminPanel" :value="'adminPanel'" :class="{ 'selected-item': selectedComponent === 'adminPanel' }">
                 <v-list-item-icon>
                     <v-icon>mdi-key</v-icon>
                 </v-list-item-icon>
@@ -72,7 +72,7 @@
     </v-dialog>
 </v-app>
 </template>
-
+    
 <script>
 import ClientsTable from './Tables/ClientsTable.vue';
 import ProjectsTable from './Tables/ProjectsTable.vue';
@@ -151,7 +151,7 @@ export default {
     },
 };
 </script>
-
+    
 <style>
 .toggle-button {
     position: fixed;
@@ -165,5 +165,11 @@ export default {
     width: 50px;
     margin-right: 10px;
     margin-bottom: 5px;
+}
+
+.selected-item {
+    margin-left: 20px;
+    transition: margin-left 0.3s ease;
+    font-weight: bold;
 }
 </style>

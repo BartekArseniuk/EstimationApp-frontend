@@ -10,7 +10,7 @@
         </v-col>
     </v-row>
     <v-row>
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="6">
             <v-card class="card1">
                 <v-card-title>
                     <v-icon size="64" left>mdi-account-multiple</v-icon>
@@ -25,7 +25,7 @@
             </v-card>
         </v-col>
 
-        <v-col cols="12" md="4">
+        <v-col cols="12" md="6">
             <v-card class="card2">
                 <v-card-title>
                     <v-icon size="64" left>mdi-folder</v-icon>
@@ -40,7 +40,7 @@
             </v-card>
         </v-col>
 
-        <v-col cols="12" md="4">
+        <v-col cols="12">
             <v-card class="card3">
                 <v-card-title>
                     <v-icon size="64" left>mdi-chart-bar</v-icon>
@@ -55,16 +55,27 @@
             </v-card>
         </v-col>
     </v-row>
+
+    <v-row>
+            <v-col cols="12" class="text-center">
+                    <v-icon class="mdi mdi-language-html5" size="20"></v-icon> HTML5
+                    <v-icon class="mdi mdi-language-css3" size="20"></v-icon> CSS3
+                    <v-icon class="mdi mdi-language-javascript" size="20"></v-icon> JavaScript
+                    <v-icon class="mdi mdi-vuejs" size="20"></v-icon> Vue.js
+                    <v-icon class="mdi mdi-vuetify" size="20"></v-icon> Vuetify
+                    <v-icon class="mdi mdi-webpack" size="20"></v-icon> Webpack
+                    <v-icon class="mdi mdi-language-php" size="20"></v-icon> PHP
+                    <v-icon class="mdi mdi-database" size="20"></v-icon> MySQL
+                    <v-icon class="mdi mdi-laravel" size="20"></v-icon> Laravel
+            </v-col>
+        </v-row>
 </v-container>
 </template>
 
 <style>
 .card1,
 .card2,
-.card3 {
-    border-radius: 20px !important;
-}
-
+.card3,
 .main-card {
     border-radius: 20px !important;
 }
