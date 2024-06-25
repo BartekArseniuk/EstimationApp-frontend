@@ -4,7 +4,7 @@
     <v-card class="table-card">
       <v-card-title>
         <v-btn v-if="isAdmin" class="add-button" @click="openModal" small color="grey darken-3" dark>
-          <v-icon>mdi-plus</v-icon>Dodaj klienta
+          <v-icon>mdi-plus</v-icon>Dodaj projekt
         </v-btn>
         <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
       </v-card-title>
@@ -42,7 +42,7 @@
 
 <script>
 import axios from 'axios';
-import ProjectForm from './Modals/ProjectForm.vue';
+import ProjectForm from '../Modals/ProjectForm.vue';
 
 export default {
   props: {
@@ -54,13 +54,31 @@ export default {
   data() {
     return {
       search: '',
-      headers: [
-        { text: 'L.p.', value: 'id' },
-        { text: 'Nazwa', value: 'name' },
-        { text: 'Klient', value: 'client.name' },
-        { text: 'Wycena', value: 'estimate' },
-        { text: 'Data dodania', value: 'created_at' },
-        { text: 'Akcje', value: 'actions', sortable: false },
+      headers: [{
+        text: 'L.p.',
+        value: 'id'
+      },
+      {
+        text: 'Nazwa',
+        value: 'name'
+      },
+      {
+        text: 'Klient',
+        value: 'client.name'
+      },
+      {
+        text: 'Wycena',
+        value: 'estimate'
+      },
+      {
+        text: 'Data dodania',
+        value: 'created_at'
+      },
+      {
+        text: 'Akcje',
+        value: 'actions',
+        sortable: false
+      },
       ],
       projects: [],
       modalOpen: false,
@@ -143,5 +161,5 @@ export default {
 </script>
 
 <style>
-@import '../styles/tables.scss'
+@import '../../styles/tables.scss'
 </style>

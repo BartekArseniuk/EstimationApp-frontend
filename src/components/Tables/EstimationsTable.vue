@@ -1,52 +1,48 @@
 <template>
-    <v-container>
-        <v-card-title>Wyceny</v-card-title>
-        <v-card class="table-card">
-            <v-card-title>
-                <v-btn v-if="isAdmin" class="add-button" @click="openModal" small color="grey darken-3" dark>
-                    <v-icon>mdi-plus</v-icon>Dodaj wycenę
-                </v-btn>
-                <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
-            </v-card-title>
-            <v-data-table :headers="headers" :items="filteredEstimations" :items-per-page="5" :search="search"
-                class="table">
-                <template v-slot:body="{ items }">
-                    <tbody v-if="items.length > 0">
-                        <tr v-for="estimation in items" :key="estimation.id">
-                            <td>{{ estimation.id }}</td>
-                            <td>{{ estimation.name }}</td>
-                            <td>{{ estimation.project.name }}</td>
-                            <td>{{ estimation.client?.name }}</td>
-                            <td>{{ estimation.amount }}</td>
-                            <td>{{ estimation.created_at }}</td>
-                            <td v-if="isAdmin">
-                                <v-icon @click="editEstimation(estimation)">mdi-pencil</v-icon>
-                                <v-icon @click="deleteEstimation(estimation.id)">mdi-delete</v-icon>
-                            </td>
-                            <td v-else>Brak uprawnień</td>
-                        </tr>
-                    </tbody>
-                    <tbody v-else>
-                        <tr>
-                            <td colspan="7" class="text-center">Aktualnie tabela nie posiada żadnych rekordów.</td>
-                        </tr>
-                    </tbody>
-                </template>
-            </v-data-table>
-        </v-card>
+<v-container>
+    <v-card-title>Wyceny</v-card-title>
+    <v-card class="table-card">
+        <v-card-title>
+            <v-btn v-if="isAdmin" class="add-button" @click="openModal" small color="grey darken-3" dark>
+                <v-icon>mdi-plus</v-icon>Dodaj wycenę
+            </v-btn>
+            <v-text-field v-model="search" prepend-icon="mdi-magnify" label="Szukaj"></v-text-field>
+        </v-card-title>
+        <v-data-table :headers="headers" :items="filteredEstimations" :items-per-page="5" :search="search" class="table">
+            <template v-slot:body="{ items }">
+                <tbody v-if="items.length > 0">
+                    <tr v-for="estimation in items" :key="estimation.id">
+                        <td>{{ estimation.id }}</td>
+                        <td>{{ estimation.name }}</td>
+                        <td>{{ estimation.project.name }}</td>
+                        <td>{{ estimation.client?.name }}</td>
+                        <td>{{ estimation.amount }}</td>
+                        <td>{{ estimation.created_at }}</td>
+                        <td v-if="isAdmin">
+                            <v-icon @click="editEstimation(estimation)">mdi-pencil</v-icon>
+                            <v-icon @click="deleteEstimation(estimation.id)">mdi-delete</v-icon>
+                        </td>
+                        <td v-else>Brak uprawnień</td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
+                    <tr>
+                        <td colspan="7" class="text-center">Aktualnie tabela nie posiada żadnych rekordów.</td>
+                    </tr>
+                </tbody>
+            </template>
+        </v-data-table>
+    </v-card>
 
-        <v-dialog v-model="modalOpen">
-            <EstimationForm :editingMode="editingMode" :editedtEstimationId="editedEstimationId"
-                @estimation-added="handleEstimationAdded" @estimation-updated="handleEstimationUpdated"
-                @cancel="closeModal" ref="estimationForm" />
-        </v-dialog>
-    </v-container>
+    <v-dialog v-model="modalOpen">
+        <EstimationForm :editingMode="editingMode" :editedtEstimationId="editedEstimationId" @estimation-added="handleEstimationAdded" @estimation-updated="handleEstimationUpdated" @cancel="closeModal" ref="estimationForm" />
+    </v-dialog>
+</v-container>
 </template>
 
 <script>
-
 import axios from 'axios';
-import EstimationForm from './Modals/EstimationForm.vue';
+import EstimationForm from '../Modals/EstimationForm.vue';
 
 export default {
     props: {
@@ -58,14 +54,35 @@ export default {
     data() {
         return {
             search: '',
-            headers: [
-                { text: 'L.p.', value: 'id' },
-                { text: 'Nazwa', value: 'name' },
-                { text: 'Projekt', value: 'project.name' },
-                { text: 'Klient', value: 'client.name' },
-                { text: 'Wycena', value: 'amount' },
-                { text: 'Data dodania', value: 'created_at' },
-                { text: 'Akcje', value: 'actions', sortable: false },
+            headers: [{
+                    text: 'L.p.',
+                    value: 'id'
+                },
+                {
+                    text: 'Nazwa',
+                    value: 'name'
+                },
+                {
+                    text: 'Projekt',
+                    value: 'project.name'
+                },
+                {
+                    text: 'Klient',
+                    value: 'client.name'
+                },
+                {
+                    text: 'Wycena',
+                    value: 'amount'
+                },
+                {
+                    text: 'Data dodania',
+                    value: 'created_at'
+                },
+                {
+                    text: 'Akcje',
+                    value: 'actions',
+                    sortable: false
+                },
             ],
             estimations: [],
             modalOpen: false,
@@ -146,5 +163,5 @@ export default {
 </script>
 
 <style>
-@import '../styles/tables.scss'
+@import '../../styles/tables.scss'
 </style>
