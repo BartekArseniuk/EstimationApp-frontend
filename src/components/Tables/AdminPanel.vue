@@ -1,5 +1,5 @@
 <template>
-<v-container>
+<v-container class="tab-page">
     <v-card-title class="title">Panel Administratora</v-card-title>
     <v-card-title>
         <v-btn color="grey darken-3" dark small @click="openRegisterModal">

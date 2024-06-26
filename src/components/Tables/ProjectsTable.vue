@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+<v-container class="tab-page">
     <v-card-title>Projekty</v-card-title>
     <v-card class="table-card">
       <v-card-title>

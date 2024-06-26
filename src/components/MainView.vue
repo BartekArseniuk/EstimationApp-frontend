@@ -1,8 +1,10 @@
 <template>
 <v-app>
 
-    <v-btn icon @click.stop="drawerOpen = !drawerOpen" class="toggle-button">
-        <v-icon size="30">{{ drawerOpen ? 'mdi-close' : 'mdi-menu' }}</v-icon>
+    <v-btn icon @click.stop="drawerOpen = !drawerOpen"
+           :style="{ left: toggleButtonLeft }"
+           class="toggle-button">
+      <v-icon size="30">{{ drawerOpen ? 'mdi-chevron-left' : 'mdi-menu' }}</v-icon>
     </v-btn>
 
     <v-navigation-drawer app color="grey darken-3" dark v-model="drawerOpen">
@@ -59,12 +61,13 @@
 
     <v-main>
         <v-container>
-            <ClientsTable v-if="selectedComponent === 'clients'" :isAdmin="isAdmin" />
-            <ProjectsTable v-if="selectedComponent === 'projects'" :isAdmin="isAdmin" />
-            <EstimationsTable v-if="selectedComponent === 'estimations'" :isAdmin="isAdmin" />
-            <HomePage v-if="selectedComponent === 'home'" />
-            <AdminPanel v-if="selectedComponent === 'adminPanel' && isAdmin" />
-
+            <transition name="slide-fade" mode="out-in">
+                <ClientsTable v-if="selectedComponent === 'clients'" :isAdmin="isAdmin" />
+                <ProjectsTable v-if="selectedComponent === 'projects'" :isAdmin="isAdmin" />
+                <EstimationsTable v-if="selectedComponent === 'estimations'" :isAdmin="isAdmin" />
+                <HomePage v-if="selectedComponent === 'home'" />
+                <AdminPanel v-if="selectedComponent === 'adminPanel' && isAdmin" />
+            </transition>
             <v-row v-if="showNavigationArrows" class="navigation-arrows">
                 <v-btn icon @click="showPreviousComponent" :disabled="currentComponentIndex === 0" class="arrow-btn">
                     <v-icon>mdi-chevron-left</v-icon>
@@ -83,7 +86,6 @@
 </v-app>
 </template>
 
-  
 <script>
 import ClientsTable from './Tables/ClientsTable.vue';
 import ProjectsTable from './Tables/ProjectsTable.vue';
@@ -117,6 +119,9 @@ export default {
         this.checkLoginStatus();
     },
     computed: {
+        toggleButtonLeft() {
+      return this.drawerOpen ? '270px' : '20px';
+    },
         showNavigationArrows() {
             return this.selectedComponent !== 'home' && this.selectedComponent !== 'adminPanel';
         },
@@ -185,13 +190,13 @@ export default {
 };
 </script>
 
-  
 <style>
 .toggle-button {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 100;
+  position: fixed;
+  top: 20px;
+  left: 270px;
+  z-index: 100;
+  transition: left 0.2s ease;
 }
 
 .logo {
@@ -202,8 +207,8 @@ export default {
 }
 
 .selected-item {
-    margin-left: 20px;
-    transition: margin-left 0.3s ease;
+    background-color: #787878;
+    transition: background-color 0.3s ease;
     font-weight: bold;
 }
 
@@ -221,5 +226,21 @@ export default {
 
 .arrow-btn:disabled {
     background-color: #E0E0E0;
+}
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+    transition: all 0.4s ease;
+}
+
+.slide-fade-enter,
+.slide-fade-leave-to {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.slide-fade-leave-active {
+    transform: translateX(-100%);
+    opacity: 0;
 }
 </style>
