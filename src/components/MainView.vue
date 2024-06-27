@@ -150,7 +150,8 @@ export default {
             this.isLoggedIn = true;
             this.userName = user.name;
             this.isAdmin = user.role === 'admin';
-            localStorage.setItem('user', JSON.stringify(user));
+            const token = btoa(JSON.stringify(user));
+            localStorage.setItem('token', token);
             this.loginModalOpen = false;
         },
         handleLogout() {
@@ -158,18 +159,20 @@ export default {
             this.userName = '';
             this.isAdmin = false;
             localStorage.removeItem('token');
-            localStorage.removeItem('user');
             this.selectedComponent = 'home';
             Swal.fire('Sukces!', 'Wylogowano pomyślnie.', 'success');
         },
         checkLoginStatus() {
             const token = localStorage.getItem('token');
-            const user = localStorage.getItem('user');
-            if (token && user) {
-                this.isLoggedIn = true;
-                const parsedUser = JSON.parse(user);
-                this.userName = parsedUser.name;
-                this.isAdmin = parsedUser.role === 'admin';
+            if (token) {
+                try {
+                    const user = JSON.parse(atob(token));
+                    this.isLoggedIn = true;
+                    this.userName = user.name;
+                    this.isAdmin = user.role === 'admin';
+                } catch (e) {
+                    this.handleLogout();
+                }
             }
         },
         showPreviousComponent() {
