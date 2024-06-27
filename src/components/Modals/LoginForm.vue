@@ -7,13 +7,22 @@
             <v-text-field v-model="password" label="Hasło" :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'" :type="showPassword ? 'text' : 'password'" @click:append="showPassword = !showPassword"></v-text-field>
             <v-card-actions>
                 <v-btn color="grey darken-3" dark type="submit">Zaloguj</v-btn>
+                <v-spacer></v-spacer>
+                <v-btn text color="grey darken-3" @click="openRemindPasswordDialog" x-small>
+                    Nie pamiętam hasła
+                </v-btn>
             </v-card-actions>
         </v-form>
     </v-card-text>
+
+    <v-dialog v-model="remindPasswordDialogOpen" max-width="500px">
+        <RemindPassword @close="closeRemindPasswordDialog" />
+    </v-dialog>
 </v-card>
 </template>
 
 <script>
+import RemindPassword from './RemindPassword.vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
@@ -22,7 +31,8 @@ export default {
         return {
             email: '',
             password: '',
-            showPassword: false
+            showPassword: false,
+            remindPasswordDialogOpen: false
         };
     },
     methods: {
@@ -51,11 +61,20 @@ export default {
         clearForm() {
             this.email = '';
             this.password = '';
+        },
+        openRemindPasswordDialog() {
+            this.remindPasswordDialogOpen = true;
+        },
+        closeRemindPasswordDialog() {
+            this.remindPasswordDialogOpen = false;
         }
+    },
+    components: {
+        RemindPassword
     }
 };
 </script>
-  
+
 <style>
 @import '../../styles/forms.scss'
 </style>
