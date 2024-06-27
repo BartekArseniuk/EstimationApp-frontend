@@ -9,16 +9,16 @@
             <v-text-field v-model="user.password" label="Hasło (min. 6 znaków)" :append-icon="user.showPassword ? 'mdi-eye' : 'mdi-eye-off'" :type="user.showPassword ? 'text' : 'password'" @click:append="user.showPassword = !user.showPassword"></v-text-field>
             <v-text-field v-model="user.confirmPassword" label="Potwierdź hasło" :append-icon="user.showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'" :type="user.showConfirmPassword ? 'text' : 'password'" @click:append="user.showConfirmPassword = !user.showConfirmPassword"></v-text-field>
             <v-card-actions>
-                <v-btn color="grey darken-3" dark type="submit">{{ editingMode ? 'Zapisz zmiany' : 'Zarejestruj użytkownika'
-            }}</v-btn>
+                <v-btn color="grey darken-3" dark type="submit">{{ editingMode ? 'Zapisz zmiany' : 'Zarejestruj użytkownika' }}</v-btn>
             </v-card-actions>
         </v-form>
     </v-card-text>
 </v-card>
 </template>
-
+  
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
     props: {
@@ -43,12 +43,12 @@ export default {
     methods: {
         register() {
             if (this.user.password.length < 6) {
-                window.alert('Hasło musi zawierać co najmniej 6 znaków.');
+                Swal.fire('Błąd!', 'Hasło musi zawierać co najmniej 6 znaków.', 'error');
                 return;
             }
 
             if (this.user.password !== this.user.confirmPassword) {
-                window.alert('Hasła się nie zgadzają.');
+                Swal.fire('Błąd!', 'Hasła się nie zgadzają.', 'error');
                 return;
             }
 
@@ -61,25 +61,25 @@ export default {
             if (this.editingMode) {
                 axios.put(`http://localhost:8000/api/users/${this.user.id}`, formData)
                     .then(response => {
-                        window.alert('Użytkownik został zaktualizowany pomyślnie');
+                        Swal.fire('Sukces!', 'Użytkownik został zaktualizowany pomyślnie.', 'success');
                         this.$emit('user-updated', response.data);
                         this.resetForm();
                     })
                     .catch(error => {
                         console.error('Błąd podczas aktualizacji użytkownika:', error);
-                        window.alert('Błąd podczas aktualizacji użytkownika');
+                        Swal.fire('Błąd!', 'Wystąpił problem podczas aktualizacji użytkownika.', 'error');
                     });
             } else {
                 axios.post('http://localhost:8000/api/register', formData)
                     .then(response => {
                         const user = response.data.user;
+                        Swal.fire('Sukces!', 'Rejestracja przebiegła pomyślnie.', 'success');
                         this.$emit('register-success', user);
                         this.resetForm();
-                        window.alert('Rejestracja przebiegła pomyślnie.');
                     })
                     .catch(error => {
                         console.error('Błąd rejestracji:', error);
-                        window.alert('Błąd rejestracji. Sprawdź swoje dane.');
+                        Swal.fire('Błąd!', 'Wystąpił problem podczas rejestracji użytkownika.', 'error');
                     });
             }
         },
@@ -100,7 +100,7 @@ export default {
     }
 };
 </script>
-
+  
 <style>
 @import '../../styles/forms.scss'
 </style>

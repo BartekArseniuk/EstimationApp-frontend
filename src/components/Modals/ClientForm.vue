@@ -28,6 +28,7 @@
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
     props: {
@@ -65,27 +66,27 @@ export default {
                 if (this.editingMode) {
                     axios.put(`http://localhost:8000/api/clients/${this.client.id}`, formData)
                         .then(response => {
-                            window.alert('Klient został zaktualizowany pomyślnie');
+                            Swal.fire('Zaktualizowano!', 'Klient został zaktualizowany pomyślnie.', 'success');
                             this.$emit('client-updated', response.data);
                         })
                         .catch(error => {
                             console.error('Błąd podczas aktualizacji klienta:', error);
-                            window.alert('Błąd podczas aktualizacji klienta');
+                            Swal.fire('Błąd!', 'Błąd podczas aktualizacji klienta.', 'error');
                         });
                 } else {
                     axios.post('http://localhost:8000/api/clients', formData)
                         .then(response => {
-                            window.alert('Klient został dodany pomyślnie');
+                            Swal.fire('Dodano!', 'Klient został dodany pomyślnie.', 'success');
                             this.$emit('client-added', response.data);
                             this.resetForm();
                         })
                         .catch(error => {
                             console.error('Błąd podczas dodawania klienta:', error);
-                            window.alert('Błąd podczas dodawania klienta');
+                            Swal.fire('Błąd!', 'Błąd podczas dodawania klienta.', 'error');
                         });
                 }
             } else {
-                window.alert('Wypełnij wymagane pola');
+                Swal.fire('Uwaga!', 'Wypełnij wszystkie wymagane pola.', 'warning');
             }
         },
         cancel() {

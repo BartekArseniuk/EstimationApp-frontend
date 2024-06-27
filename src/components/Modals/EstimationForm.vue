@@ -21,7 +21,7 @@
             </v-radio-group>
             <v-text-field v-model="estimation.amount" label="Wycena *" dense></v-text-field>
             <v-card-actions>
-                <v-btn color="grey darken-3" dark type="submit">{{ editingMode ? 'Zapisz zmiany' : 'Dodaj projekt'
+                <v-btn color="grey darken-3" dark type="submit">{{ editingMode ? 'Zapisz zmiany' : 'Dodaj wycenę'
             }}</v-btn>
                 <v-btn color="grey darken-3" dark @click="cancel">Anuluj</v-btn>
             </v-card-actions>
@@ -38,6 +38,7 @@
 <script>
 import axios from 'axios';
 import ProjectForm from './ProjectForm.vue';
+import Swal from 'sweetalert2';
 
 export default {
     props: {
@@ -93,28 +94,28 @@ export default {
                 if (this.editingMode) {
                     axios.put(`http://localhost:8000/api/estimations/${this.estimation.id}`, formData)
                         .then(response => {
-                            window.alert('Wycena została zaktualizowana pomyślnie');
+                            Swal.fire('Zaktualizowano!', 'Wycena została zaktualizowana pomyślnie.', 'success');
                             this.$emit('estimation-updated', response.data);
                             this.resetForm();
                         })
                         .catch(error => {
-                            window.alert('Błąd podczas aktualizacji wyceny');
+                            Swal.fire('Błąd!', 'Błąd podczas aktualizacji wyceny.', 'error');
                             console.error('Błąd podczas aktualizacji wyceny:', error);
                         });
                 } else {
                     axios.post('http://localhost:8000/api/estimations', formData)
                         .then(response => {
-                            window.alert('Wycena została dodana pomyślnie');
+                            Swal.fire('Dodano!', 'Wycena została dodana pomyślnie.', 'success');
                             this.$emit('estimation-added', response.data);
                             this.resetForm();
                         })
                         .catch(error => {
-                            window.alert('Błąd podczas dodawania wyceny');
+                            Swal.fire('Błąd!', 'Błąd podczas dodawania wyceny.', 'error');
                             console.error('Błąd podczas dodawania wyceny:', error);
                         });
                 }
             } else {
-                window.alert('Wypełnij wymagane pola');
+                Swal.fire('Uwaga!', 'Wypełnij wszystkie wymagane pola.', 'warning');
             }
         },
         cancel() {

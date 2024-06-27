@@ -31,6 +31,7 @@
 <script>
 import axios from 'axios';
 import ClientForm from './ClientForm.vue';
+import Swal from 'sweetalert2';
 
 export default {
     props: {
@@ -77,28 +78,28 @@ export default {
                 if (this.editingMode) {
                     axios.put(`http://localhost:8000/api/projects/${this.project.id}`, formData)
                         .then(response => {
-                            window.alert('Projekt został zaktualizowany pomyślnie');
+                            Swal.fire('Zaktualizowano!', 'Projekt został zaktualizowany pomyślnie', 'success');
                             this.$emit('project-updated', response.data);
                             this.resetForm();
                         })
                         .catch(error => {
-                            window.alert('Błąd podczas aktualizacji projektu');
+                            Swal.fire('Błąd!', 'Wystąpił problem podczas aktualizacji projektu', 'error');
                             console.error('Błąd podczas aktualizacji projektu:', error);
                         });
                 } else {
                     axios.post('http://localhost:8000/api/projects', formData)
                         .then(response => {
-                            window.alert('Projekt został dodany pomyślnie');
+                            Swal.fire('Dodano!', 'Projekt został dodany pomyślnie', 'success');
                             this.$emit('project-added', response.data);
                             this.resetForm();
                         })
                         .catch(error => {
-                            window.alert('Błąd podczas dodawania projektu');
+                            Swal.fire('Błąd!', 'Wystąpił problem podczas dodawania projektu', 'error');
                             console.error('Błąd podczas dodawania projektu:', error);
                         });
                 }
             } else {
-                window.alert('Wypełnij wymagane pola');
+                Swal.fire('Uwaga!', 'Proszę wypełnić wymagane pola', 'warning');
             }
         },
         cancel() {
@@ -140,7 +141,7 @@ export default {
     },
 };
 </script>
-
+  
 <style>
 @import '../../styles/forms.scss'
 </style>

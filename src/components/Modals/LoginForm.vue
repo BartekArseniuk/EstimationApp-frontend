@@ -15,6 +15,7 @@
 
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -40,11 +41,11 @@ export default {
                     this.$emit('login-success', user);
                     this.clearForm();
                     this.$emit('close');
-                    window.alert('Zalogowano pomyślnie.');
+                    Swal.fire('Sukces!', 'Zalogowano pomyślnie.', 'success');
                 })
                 .catch(error => {
                     console.error('Błąd logowania:', error);
-                    window.alert('Błąd logowania. Sprawdź swoje dane.');
+                    Swal.fire('Błąd!', 'Błąd logowania. Sprawdź swoje dane.', 'error');
                 });
         },
         clearForm() {
@@ -54,7 +55,7 @@ export default {
     }
 };
 </script>
-
+  
 <style>
 @import '../../styles/forms.scss'
 </style>

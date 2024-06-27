@@ -20,7 +20,7 @@
                         <td>{{ estimation.created_at }}</td>
                         <td v-if="isAdmin">
                             <v-icon @click="editEstimation(estimation)">mdi-pencil</v-icon>
-                            <v-icon @click="deleteEstimation(estimation.id)">mdi-delete</v-icon>
+                            <v-icon @click="confirmDeleteEstimation(estimation.id)">mdi-delete</v-icon>
                         </td>
                         <td v-else>Brak uprawnień</td>
                     </tr>
@@ -35,7 +35,7 @@
     </v-card>
 
     <v-dialog v-model="modalOpen">
-        <EstimationForm :editingMode="editingMode" :editedtEstimationId="editedEstimationId" @estimation-added="handleEstimationAdded" @estimation-updated="handleEstimationUpdated" @cancel="closeModal" ref="estimationForm" />
+        <EstimationForm :editingMode="editingMode" :editedEstimationId="editedEstimationId" @estimation-added="handleEstimationAdded" @estimation-updated="handleEstimationUpdated" @cancel="closeModal" ref="estimationForm" />
     </v-dialog>
 </v-container>
 </template>
@@ -43,6 +43,7 @@
 <script>
 import axios from 'axios';
 import EstimationForm from '../Modals/EstimationForm.vue';
+import Swal from 'sweetalert2';
 
 export default {
     props: {
@@ -108,11 +109,13 @@ export default {
     },
     methods: {
         fetchEstimations() {
-            axios.get('http://localhost:8000/api/estimations').then(response => {
-                this.estimations = response.data;
-            }).catch(error => {
-                console.error('Błąd pobierania estymacji:', error);
-            });
+            axios.get('http://localhost:8000/api/estimations')
+                .then(response => {
+                    this.estimations = response.data;
+                })
+                .catch(error => {
+                    console.error('Błąd pobierania estymacji:', error);
+                });
         },
         openModal() {
             this.modalOpen = true;
@@ -148,14 +151,28 @@ export default {
                 this.$refs.estimationForm.editEstimation(estimation);
             });
         },
+        confirmDeleteEstimation(estimationId) {
+            Swal.fire({
+                title: 'Czy na pewno chcesz usunąć tę wycenę?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Tak, usuń wycenę',
+                cancelButtonText: 'Anuluj',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.deleteEstimation(estimationId);
+                }
+            });
+        },
         deleteEstimation(estimationId) {
             axios.delete(`http://localhost:8000/api/estimations/${estimationId}`)
-                .then(response => {
+                .then(() => {
                     this.estimations = this.estimations.filter(estimation => estimation.id !== estimationId);
-                    window.alert('Usunięto wycenę', response);
+                    Swal.fire('Usunięto!', 'Wycena została pomyślnie usunięta.', 'success');
                 })
                 .catch(error => {
                     console.error('Błąd usuwania wyceny:', error);
+                    Swal.fire('Błąd!', 'Wystąpił problem podczas usuwania wyceny.', 'error');
                 });
         }
     },

@@ -1,10 +1,8 @@
 <template>
 <v-app>
 
-    <v-btn icon @click.stop="drawerOpen = !drawerOpen"
-           :style="{ left: toggleButtonLeft }"
-           class="toggle-button">
-      <v-icon size="30">{{ drawerOpen ? 'mdi-chevron-left' : 'mdi-menu' }}</v-icon>
+    <v-btn icon @click.stop="drawerOpen = !drawerOpen" :style="{ left: toggleButtonLeft }" class="toggle-button">
+        <v-icon size="30">{{ drawerOpen ? 'mdi-chevron-left' : 'mdi-menu' }}</v-icon>
     </v-btn>
 
     <v-navigation-drawer app color="grey darken-3" dark v-model="drawerOpen">
@@ -72,13 +70,12 @@
                 <v-btn icon @click="showPreviousComponent" :disabled="currentComponentIndex === 0" class="arrow-btn">
                     <v-icon>mdi-chevron-left</v-icon>
                 </v-btn>
-
                 <v-btn icon @click="showNextComponent" :disabled="currentComponentIndex === componentsList.length - 1" class="arrow-btn">
                     <v-icon>mdi-chevron-right</v-icon>
                 </v-btn>
             </v-row>
         </v-container>
-    </v-main>
+    </v-main>   
 
     <v-dialog v-model="loginModalOpen">
         <LoginForm @close="loginModalOpen = false" @login-success="handleLoginSuccess" />
@@ -93,6 +90,7 @@ import EstimationsTable from './Tables/EstimationsTable.vue';
 import HomePage from './HomePage.vue';
 import AdminPanel from './Tables/AdminPanel.vue';
 import LoginForm from './Modals/LoginForm.vue';
+import Swal from 'sweetalert2';
 
 export default {
     data() {
@@ -120,8 +118,8 @@ export default {
     },
     computed: {
         toggleButtonLeft() {
-      return this.drawerOpen ? '270px' : '20px';
-    },
+            return this.drawerOpen ? '270px' : '20px';
+        },
         showNavigationArrows() {
             return this.selectedComponent !== 'home' && this.selectedComponent !== 'adminPanel';
         },
@@ -162,7 +160,7 @@ export default {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
             this.selectedComponent = 'home';
-            window.alert('Wylogowano pomyślnie.');
+            Swal.fire('Sukces!', 'Wylogowano pomyślnie.', 'success');
         },
         checkLoginStatus() {
             const token = localStorage.getItem('token');
@@ -192,11 +190,10 @@ export default {
 
 <style>
 .toggle-button {
-  position: fixed;
-  top: 20px;
-  left: 270px;
-  z-index: 100;
-  transition: left 0.2s ease;
+    top: 20px;
+    left: 270px;
+    z-index: 100;
+    transition: left 0.2s ease;
 }
 
 .logo {

@@ -3,8 +3,7 @@
     <v-card-title class="title">Panel Administratora</v-card-title>
     <v-card-title>
         <v-btn color="grey darken-3" dark small @click="openRegisterModal">
-            <v-icon>mdi-plus</v-icon>Dodaj
-            użytkownika
+            <v-icon>mdi-plus</v-icon>Dodaj użytkownika
         </v-btn>
     </v-card-title>
     <v-card class="table-card">
@@ -18,7 +17,7 @@
                         <td>{{ user.created_at }}</td>
                         <td v-if="index !== 0 || user.isActive">
                             <v-icon @click="editUser(user)">mdi-pencil</v-icon>
-                            <v-icon @click="deleteUser(user.id)">mdi-delete</v-icon>
+                            <v-icon @click="confirmDeleteUser(user.id)">mdi-delete</v-icon>
                         </td>
                         <td v-else colspan="5">Brak akcji</td>
                     </tr>
@@ -37,9 +36,10 @@
     </v-dialog>
 </v-container>
 </template>
-
+  
 <script>
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import RegisterForm from '../Modals/RegisterForm.vue';
 
 export default {
@@ -99,14 +99,28 @@ export default {
                 }
             });
         },
+        confirmDeleteUser(userId) {
+            Swal.fire({
+                title: 'Czy na pewno chcesz usunąć użytkownika?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Tak, usuń',
+                cancelButtonText: 'Anuluj',
+            }).then(result => {
+                if (result.isConfirmed) {
+                    this.deleteUser(userId);
+                }
+            });
+        },
         deleteUser(userId) {
             axios.delete(`http://localhost:8000/api/users/${userId}`)
                 .then(() => {
                     this.users = this.users.filter(user => user.id !== userId);
-                    window.alert('Usunięto użytkownika');
+                    Swal.fire('Usunięto!', 'Użytkownik został pomyślnie usunięty.', 'success');
                 })
                 .catch(error => {
                     console.error('Błąd usuwania użytkownika:', error);
+                    Swal.fire('Błąd!', 'Wystąpił problem podczas usuwania użytkownika.', 'error');
                 });
         },
         openRegisterModal() {
@@ -129,7 +143,7 @@ export default {
     }
 };
 </script>
-
+  
 <style>
 @import '../../styles/tables.scss';
 

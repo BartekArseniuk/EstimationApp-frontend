@@ -64,15 +64,15 @@
 
     <v-row>
     <v-col cols="12" class="text-center">
-        <v-icon size="12" class="mdi mdi-language-html5"></v-icon> HTML5
-        <v-icon size="12" class="mdi mdi-language-css3"></v-icon> CSS3
-        <v-icon size="12" class="mdi mdi-language-javascript"></v-icon> JavaScript
-        <v-icon size="12" class="mdi mdi-vuejs"></v-icon> Vue.js
-        <v-icon size="12" class="mdi mdi-vuetify"></v-icon> Vuetify
-        <v-icon size="12" class="mdi mdi-webpack"></v-icon> Webpack
-        <v-icon size="12" class="mdi mdi-language-php"></v-icon> PHP
-        <v-icon size="12" class="mdi mdi-database"></v-icon> MySQL
-        <v-icon size="12" class="mdi mdi-laravel"></v-icon> Laravel
+        <v-icon size="20" class="mdi mdi-language-html5"></v-icon> HTML5
+        <v-icon size="20" class="mdi mdi-language-css3"></v-icon> CSS3
+        <v-icon size="20" class="mdi mdi-language-javascript"></v-icon> JavaScript
+        <v-icon size="20" class="mdi mdi-vuejs"></v-icon> Vue.js
+        <v-icon size="20" class="mdi mdi-vuetify"></v-icon> Vuetify
+        <v-icon size="20" class="mdi mdi-webpack"></v-icon> Webpack
+        <v-icon size="20" class="mdi mdi-language-php"></v-icon> PHP
+        <v-icon size="20" class="mdi mdi-database"></v-icon> MySQL
+        <v-icon size="20" class="mdi mdi-laravel"></v-icon> Laravel
     </v-col>
 </v-row>
 </v-container>

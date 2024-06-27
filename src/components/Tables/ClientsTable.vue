@@ -19,7 +19,7 @@
                         <td>{{ client.created_at }}</td>
                         <td v-if="isAdmin">
                             <v-icon @click="editClient(client)">mdi-pencil</v-icon>
-                            <v-icon @click="deleteClient(client.id)">mdi-delete</v-icon>
+                            <v-icon @click="confirmDeleteClient(client)">mdi-delete</v-icon>
                         </td>
                         <td v-else>Brak uprawnień</td>
                     </tr>
@@ -42,6 +42,7 @@
 <script>
 import axios from 'axios';
 import ClientForm from '../Modals/ClientForm.vue';
+import Swal from 'sweetalert2';
 
 export default {
     props: {
@@ -137,32 +138,54 @@ export default {
                 this.$refs.clientForm.editClient(client);
             });
         },
-        deleteClient(clientId) {
+        confirmDeleteClient(client) {
             axios.get('http://localhost:8000/api/projects')
                 .then(response => {
                     const projects = response.data;
-                    const clientProjects = projects.filter(project => project.client_id === clientId);
+                    const clientProjects = projects.filter(project => project.client_id === client.id);
 
                     console.log('Client projects:', clientProjects);
 
                     if (clientProjects.length > 0) {
-                        const confirmDelete = window.confirm('Klient ma przypisane projekty. Jeśli usuniesz klienta, jego projekty również zostaną usunięte. Czy na pewno chcesz kontynuować?');
-                        if (!confirmDelete) {
-                            return;
-                        }
-                    }
-
-                    axios.delete(`http://localhost:8000/api/clients/${clientId}`)
-                        .then(() => {
-                            this.clients = this.clients.filter(client => client.id !== clientId);
-                            window.alert('Usunięto klienta');
-                        })
-                        .catch(error => {
-                            console.error('Błąd usuwania klienta:', error);
+                        Swal.fire({
+                            title: 'Klient ma przypisane projekty!',
+                            text: 'Jeśli usuniesz klienta, jego projekty również zostaną usunięte. Czy na pewno chcesz kontynuować?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Tak, usuń klienta',
+                            cancelButtonText: 'Anuluj',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.deleteClient(client.id);
+                            }
                         });
+                    } else {
+                        Swal.fire({
+                            title: 'Czy na pewno chcesz usunąć tego klienta?',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonText: 'Tak, usuń klienta',
+                            cancelButtonText: 'Anuluj',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                this.deleteClient(client.id);
+                            }
+                        });
+                    }
                 })
                 .catch(error => {
                     console.error('Błąd pobierania projektów:', error);
+                });
+        },
+        deleteClient(clientId) {
+            axios.delete(`http://localhost:8000/api/clients/${clientId}`)
+                .then(() => {
+                    this.clients = this.clients.filter(client => client.id !== clientId);
+                    Swal.fire('Usunięto!', 'Klient został pomyślnie usunięty.', 'success');
+                })
+                .catch(error => {
+                    console.error('Błąd usuwania klienta:', error);
+                    Swal.fire('Błąd!', 'Wystąpił problem podczas usuwania klienta.', 'error');
                 });
         },
         getLogoUrl(base64String) {

@@ -1,5 +1,5 @@
 <template>
-<v-container class="tab-page">
+  <v-container class="tab-page">
     <v-card-title>Projekty</v-card-title>
     <v-card class="table-card">
       <v-card-title>
@@ -19,7 +19,7 @@
               <td>{{ project.created_at }}</td>
               <td v-if="isAdmin">
                 <v-icon @click="editProject(project)">mdi-pencil</v-icon>
-                <v-icon @click="deleteProject(project.id)">mdi-delete</v-icon>
+                <v-icon @click="confirmDeleteEstimation(project.id)">mdi-delete</v-icon>
               </td>
               <td v-else>Brak uprawnień</td>
             </tr>
@@ -43,6 +43,7 @@
 <script>
 import axios from 'axios';
 import ProjectForm from '../Modals/ProjectForm.vue';
+import Swal from 'sweetalert2';
 
 export default {
   props: {
@@ -146,14 +147,28 @@ export default {
         this.$refs.projectForm.editProject(project);
       });
     },
+    confirmDeleteEstimation(projectId) {
+      Swal.fire({
+        title: 'Czy na pewno chcesz usunąć ten projekt?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Tak, usuń projekt',
+        cancelButtonText: 'Anuluj',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteProject(projectId);
+        }
+      });
+    },
     deleteProject(projectId) {
       axios.delete(`http://localhost:8000/api/projects/${projectId}`)
         .then(() => {
           this.projects = this.projects.filter(project => project.id !== projectId);
-          window.alert('Usunięto projekt');
+          Swal.fire('Usunięto!', 'Projekt został pomyślnie usunięty.', 'success');
         })
         .catch(error => {
           console.error('Błąd usuwania projektu:', error);
+          Swal.fire('Błąd!', 'Wystąpił problem podczas usuwania projektu.', 'error');
         });
     }
   }
