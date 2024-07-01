@@ -6,8 +6,8 @@
         <v-form @submit.prevent="register">
             <v-text-field v-model="user.name" label="Nazwa"></v-text-field>
             <v-text-field v-model="user.email" label="Email" type="email"></v-text-field>
-            <v-text-field v-model="user.password" label="Hasło (min. 6 znaków)" :append-icon="user.showPassword ? 'mdi-eye' : 'mdi-eye-off'" :type="user.showPassword ? 'text' : 'password'" @click:append="user.showPassword = !user.showPassword"></v-text-field>
-            <v-text-field v-model="user.confirmPassword" label="Potwierdź hasło" :append-icon="user.showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'" :type="user.showConfirmPassword ? 'text' : 'password'" @click:append="user.showConfirmPassword = !user.showConfirmPassword"></v-text-field>
+            <v-text-field v-if="!editingMode" v-model="user.password" label="Hasło (min. 8 znaków)" :append-icon="user.showPassword ? 'mdi-eye' : 'mdi-eye-off'" :type="user.showPassword ? 'text' : 'password'" @click:append="user.showPassword = !user.showPassword"></v-text-field>
+            <v-text-field v-if="!editingMode" v-model="user.confirmPassword" label="Potwierdź hasło" :append-icon="user.showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'" :type="user.showConfirmPassword ? 'text' : 'password'" @click:append="user.showConfirmPassword = !user.showConfirmPassword"></v-text-field>
             <v-card-actions>
                 <v-btn color="grey darken-3" dark type="submit">{{ editingMode ? 'Zapisz zmiany' : 'Zarejestruj użytkownika' }}</v-btn>
             </v-card-actions>
@@ -42,21 +42,26 @@ export default {
     },
     methods: {
         register() {
-            if (this.user.password.length < 6) {
-                Swal.fire('Błąd!', 'Hasło musi zawierać co najmniej 6 znaków.', 'error');
-                return;
-            }
+            if (!this.editingMode) {
+                if (this.user.password.length < 8) {
+                    Swal.fire('Błąd!', 'Hasło musi zawierać co najmniej 8 znaków.', 'error');
+                    return;
+                }
 
-            if (this.user.password !== this.user.confirmPassword) {
-                Swal.fire('Błąd!', 'Hasła się nie zgadzają.', 'error');
-                return;
+                if (this.user.password !== this.user.confirmPassword) {
+                    Swal.fire('Błąd!', 'Hasła się nie zgadzają.', 'error');
+                    return;
+                }
             }
 
             const formData = {
                 name: this.user.name,
                 email: this.user.email,
-                password: this.user.password,
             };
+
+            if (!this.editingMode) {
+                formData.password = this.user.password;
+            }
 
             if (this.editingMode) {
                 axios.put(`http://localhost:8000/api/users/${this.user.id}`, formData)
