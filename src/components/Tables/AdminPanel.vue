@@ -36,11 +36,11 @@
     </v-dialog>
 </v-container>
 </template>
-  
+
 <script>
-import axios from 'axios';
 import Swal from 'sweetalert2';
 import RegisterForm from '../Modals/RegisterForm.vue';
+import apiService from '@/config';
 
 export default {
     data() {
@@ -81,7 +81,7 @@ export default {
     },
     methods: {
         fetchUsers() {
-            axios.get('http://localhost:8000/api/users')
+            apiService.get('/users')
                 .then(response => {
                     this.users = response.data;
                 })
@@ -113,7 +113,7 @@ export default {
             });
         },
         deleteUser(userId) {
-            axios.delete(`http://localhost:8000/api/users/${userId}`)
+            apiService.delete(`/users/${userId}`)
                 .then(() => {
                     this.users = this.users.filter(user => user.id !== userId);
                     Swal.fire('Usunięto!', 'Użytkownik został pomyślnie usunięty.', 'success');
@@ -143,7 +143,7 @@ export default {
     }
 };
 </script>
-  
+
 <style>
 @import '../../styles/tables.scss';
 

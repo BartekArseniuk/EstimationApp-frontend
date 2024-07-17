@@ -22,8 +22,8 @@
 </template>
 
 <script>
+import apiService from '@/config';
 import RemindPassword from './RemindPassword.vue';
-import axios from 'axios';
 import Swal from 'sweetalert2';
 
 export default {
@@ -42,12 +42,12 @@ export default {
                 password: this.password
             };
 
-            axios.post('http://localhost:8000/api/login', formData)
+            apiService.post('/login', formData)
                 .then(response => {
-                    const token = response.data.token;
+                    const AuthToken = response.data.token;
                     const user = response.data.user;
 
-                    localStorage.setItem('token', token);
+                    localStorage.setItem('AuthToken', AuthToken);
                     this.$emit('login-success', user);
                     this.clearForm();
                     this.$emit('close');

@@ -21,8 +21,8 @@
             </v-radio-group>
             <v-text-field v-model="estimation.amount" label="Wycena *" dense></v-text-field>
             <v-card-actions>
-                <v-btn color="grey darken-3" dark type="submit">{{ editingMode ? 'Zapisz zmiany' : 'Dodaj wycenę'
-            }}</v-btn>
+                <v-btn color="grey darken-3" dark type="submit" v-if="editingMode">Zapisz zmiany</v-btn>
+                <v-btn color="grey darken-3" dark type="submit" v-else>Dodaj wycenę</v-btn>
                 <v-btn color="grey darken-3" dark @click="cancel">Anuluj</v-btn>
             </v-card-actions>
             <v-subheader x-small>* Pole obowiązkowe</v-subheader>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import apiService from '@/config';
 import ProjectForm from './ProjectForm.vue';
 import Swal from 'sweetalert2';
 
@@ -50,15 +50,7 @@ export default {
     data() {
         return {
             projectFormOpen: false,
-            estimation: {
-                id: null,
-                name: '',
-                description: '',
-                project: null,
-                date: new Date().toISOString().substr(0, 10),
-                type: 'hourly',
-                amount: '',
-            },
+            estimation: this.getInitialEstimation(),
             projects: [],
         };
     },
@@ -66,8 +58,19 @@ export default {
         this.fetchProjects();
     },
     methods: {
+        getInitialEstimation() {
+            return {
+                id: null,
+                name: '',
+                description: '',
+                project: null,
+                date: new Date().toISOString().substr(0, 10),
+                type: 'hourly',
+                amount: '',
+            };
+        },
         fetchProjects() {
-            axios.get('http://localhost:8000/api/projects')
+            apiService.get('/projects')
                 .then(response => {
                     this.projects = response.data.map(project => ({
                         id: project.id,
@@ -89,31 +92,23 @@ export default {
                     client_id: selectedProject.client_id,
                     date: this.estimation.date,
                     type: this.estimation.type,
-                    amount: this.estimation.amount
+                    amount: this.estimation.amount,
                 };
-                if (this.editingMode) {
-                    axios.put(`http://localhost:8000/api/estimations/${this.estimation.id}`, formData)
-                        .then(response => {
-                            Swal.fire('Zaktualizowano!', 'Wycena została zaktualizowana pomyślnie.', 'success');
-                            this.$emit('estimation-updated', response.data);
-                            this.resetForm();
-                        })
-                        .catch(error => {
-                            Swal.fire('Błąd!', 'Błąd podczas aktualizacji wyceny.', 'error');
-                            console.error('Błąd podczas aktualizacji wyceny:', error);
-                        });
-                } else {
-                    axios.post('http://localhost:8000/api/estimations', formData)
-                        .then(response => {
-                            Swal.fire('Dodano!', 'Wycena została dodana pomyślnie.', 'success');
-                            this.$emit('estimation-added', response.data);
-                            this.resetForm();
-                        })
-                        .catch(error => {
-                            Swal.fire('Błąd!', 'Błąd podczas dodawania wyceny.', 'error');
-                            console.error('Błąd podczas dodawania wyceny:', error);
-                        });
-                }
+                const apiCall = this.editingMode ?
+                    apiService.put(`/estimations/${this.estimation.id}`, formData) :
+                    apiService.post('/estimations', formData);
+
+                apiCall
+                    .then(response => {
+                        const message = this.editingMode ? 'Zaktualizowano!' : 'Dodano!';
+                        Swal.fire(message, 'Wycena została zapisana pomyślnie.', 'success');
+                        this.$emit(this.editingMode ? 'estimation-updated' : 'estimation-added', response.data);
+                        this.resetForm();
+                    })
+                    .catch(error => {
+                        Swal.fire('Błąd!', 'Błąd podczas zapisywania wyceny.', 'error');
+                        console.error('Błąd podczas zapisywania wyceny:', error);
+                    });
             } else {
                 Swal.fire('Uwaga!', 'Wypełnij wszystkie wymagane pola.', 'warning');
             }
@@ -123,14 +118,7 @@ export default {
             this.$emit('cancel');
         },
         resetForm() {
-            this.estimation = {
-                name: '',
-                description: '',
-                project: null,
-                date: new Date().toISOString().substr(0, 10),
-                type: 'hourly',
-                amount: '',
-            };
+            this.estimation = this.getInitialEstimation();
         },
         editEstimation(estimation) {
             this.estimation = {

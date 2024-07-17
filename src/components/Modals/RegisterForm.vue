@@ -15,9 +15,9 @@
     </v-card-text>
 </v-card>
 </template>
-  
+
 <script>
-import axios from 'axios';
+import apiService from '@/config';
 import Swal from 'sweetalert2';
 
 export default {
@@ -64,7 +64,7 @@ export default {
             }
 
             if (this.editingMode) {
-                axios.put(`http://localhost:8000/api/users/${this.user.id}`, formData)
+                apiService.put(`/users/${this.user.id}`, formData)
                     .then(response => {
                         Swal.fire('Sukces!', 'Użytkownik został zaktualizowany pomyślnie.', 'success');
                         this.$emit('user-updated', response.data);
@@ -75,7 +75,7 @@ export default {
                         Swal.fire('Błąd!', 'Wystąpił problem podczas aktualizacji użytkownika.', 'error');
                     });
             } else {
-                axios.post('http://localhost:8000/api/register', formData)
+                apiService.post('/register', formData)
                     .then(response => {
                         const user = response.data.user;
                         Swal.fire('Sukces!', 'Rejestracja przebiegła pomyślnie.', 'success');
@@ -105,7 +105,7 @@ export default {
     }
 };
 </script>
-  
+
 <style>
 @import '../../styles/forms.scss'
 </style>

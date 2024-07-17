@@ -14,8 +14,8 @@
                     <tr v-for="estimation in items" :key="estimation.id">
                         <td>{{ estimation.id }}</td>
                         <td>{{ estimation.name }}</td>
-                        <td>{{ estimation.project.name }}</td>
-                        <td>{{ estimation.client?.name }}</td>
+                        <td>{{ estimation.project ? estimation.project.name : 'Brak projektu' }}</td>
+                        <td>{{ estimation.client ? estimation.client.name : 'Brak klienta' }}</td>
                         <td>{{ estimation.amount }}</td>
                         <td>{{ estimation.created_at }}</td>
                         <td v-if="isAdmin">
@@ -41,9 +41,9 @@
 </template>
 
 <script>
-import axios from 'axios';
 import EstimationForm from '../Modals/EstimationForm.vue';
 import Swal from 'sweetalert2';
+import apiService from '@/config';
 
 export default {
     props: {
@@ -109,7 +109,7 @@ export default {
     },
     methods: {
         fetchEstimations() {
-            axios.get('http://localhost:8000/api/estimations')
+            apiService.get('/estimations')
                 .then(response => {
                     this.estimations = response.data;
                 })
@@ -165,7 +165,7 @@ export default {
             });
         },
         deleteEstimation(estimationId) {
-            axios.delete(`http://localhost:8000/api/estimations/${estimationId}`)
+            apiService.delete(`/estimations/${estimationId}`)
                 .then(() => {
                     this.estimations = this.estimations.filter(estimation => estimation.id !== estimationId);
                     Swal.fire('Usunięto!', 'Wycena została pomyślnie usunięta.', 'success');

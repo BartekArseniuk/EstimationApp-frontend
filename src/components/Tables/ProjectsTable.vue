@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import apiService from '@/config';
 import ProjectForm from '../Modals/ProjectForm.vue';
 import Swal from 'sweetalert2';
 
@@ -105,7 +105,7 @@ export default {
   },
   methods: {
     fetchProjects() {
-      axios.get('http://localhost:8000/api/projects')
+      apiService.get('/projects')
         .then(response => {
           this.projects = response.data;
         })
@@ -161,7 +161,7 @@ export default {
       });
     },
     deleteProject(projectId) {
-      axios.delete(`http://localhost:8000/api/projects/${projectId}`)
+      apiService.delete(`/projects/${projectId}`)
         .then(() => {
           this.projects = this.projects.filter(project => project.id !== projectId);
           Swal.fire('Usunięto!', 'Projekt został pomyślnie usunięty.', 'success');

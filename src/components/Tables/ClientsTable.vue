@@ -40,9 +40,9 @@
 </template>
 
 <script>
-import axios from 'axios';
 import ClientForm from '../Modals/ClientForm.vue';
 import Swal from 'sweetalert2';
+import apiService from '@/config';
 
 export default {
     props: {
@@ -101,7 +101,7 @@ export default {
     },
     methods: {
         fetchClients() {
-            axios.get('http://localhost:8000/api/clients')
+            apiService.get('/clients')
                 .then(response => {
                     this.clients = response.data;
                 })
@@ -139,7 +139,7 @@ export default {
             });
         },
         confirmDeleteClient(client) {
-            axios.get('http://localhost:8000/api/projects')
+            apiService.get('/projects')
                 .then(response => {
                     const projects = response.data;
                     const clientProjects = projects.filter(project => project.client_id === client.id);
@@ -178,7 +178,7 @@ export default {
                 });
         },
         deleteClient(clientId) {
-            axios.delete(`http://localhost:8000/api/clients/${clientId}`)
+            apiService.delete(`/clients/${clientId}`)
                 .then(() => {
                     this.clients = this.clients.filter(client => client.id !== clientId);
                     Swal.fire('Usunięto!', 'Klient został pomyślnie usunięty.', 'success');
